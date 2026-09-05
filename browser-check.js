@@ -13,7 +13,8 @@ async function clickCell(x,y){const p=await page.evaluate(({x,y})=>{const r=docu
 if(process.argv[2]==='--hosted'){
  const url=process.argv[3];const requests=[];page.on('request',r=>requests.push(r.url()));
  try{
-  await page.goto(url);await page.waitForFunction(()=>document.querySelector('#check').classList.contains('enabled'));
+  const wordData=Promise.all(['words.json','common-words.json'].map(file=>page.waitForResponse(r=>r.url()===new URL(file,url).href).then(r=>r.finished())));
+  await page.goto(url);await wordData;await page.waitForFunction(()=>document.querySelector('#check').classList.contains('enabled'));
   await page.locator('#score-open').click();await page.waitForSelector('[data-score-inspect="hull"]');
   await page.locator('[data-score-inspect="hull"]').hover();assert.equal(await page.locator('.hull-outline').count(),1);
   await page.locator('#score-close').click();await page.locator('#board-share').click();assert.equal(await page.locator('.local-sharing').isVisible(),false);
