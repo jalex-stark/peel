@@ -10,6 +10,21 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));
 mkdirSync('artifacts',{recursive:true});
 const boardState=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('peel-game')));
 async function clickCell(x,y){const p=await page.evaluate(({x,y})=>{const r=document.querySelector('#board').getBoundingClientRect(),m=new DOMMatrix(getComputedStyle(document.querySelector('#plane')).transform);return {x:r.left+m.e+(x*48+22)*m.a,y:r.top+m.f+(y*48+22)*m.d};},{x,y});await page.mouse.click(p.x,p.y);}
+if(process.argv[2]==='--hosted'){
+ const url=process.argv[3];const requests=[];page.on('request',r=>requests.push(r.url()));
+ try{
+  await page.goto(url);await page.waitForFunction(()=>document.querySelector('#check').classList.contains('enabled'));
+  await page.locator('#score-open').click();await page.waitForSelector('[data-score-inspect="hull"]');
+  await page.locator('[data-score-inspect="hull"]').hover();assert.equal(await page.locator('.hull-outline').count(),1);
+  await page.locator('#score-close').click();await page.locator('#board-share').click();assert.equal(await page.locator('.local-sharing').isVisible(),false);
+  assert.ok(!requests.some(u=>u.includes('/__peel/share')));
+  await page.goto(new URL('boards/first-board.html',url).href);
+  assert.equal(await page.locator('.tile').count(),144);
+  await page.locator('[data-inspect="coverage"]').hover();assert.equal(await page.locator('[data-overlay="coverage"]').getAttribute('class'),'overlay active');
+  assert.deepEqual(errors,[]);console.log('Passed: hosted game loads dictionary and scoring; local sharing disabled; published 144-tile export and interactive cave highlights work.');
+ }finally{await browser.close();}
+ process.exit(0);
+}
 try{
  await page.goto('http://localhost:5173');
  await page.waitForFunction(()=>document.querySelector('#check').classList.contains('enabled')&&document.querySelectorAll('#plane .tile[data-id]').length===21);

@@ -69,3 +69,12 @@ In the development server, live local sharing saves each browser’s current boa
 Save / load → **Download board & metrics HTML** creates one standalone file you can send to someone. It opens offline, with interactive metric highlights, the board code, a frozen scoring snapshot, and a download of board/metrics JSON. It includes custom dictionary preferences and active modifiers. It is an inspectable snapshot; to edit tiles, import its board code into the game. Local QA recordings are not included.
 
 Run the full game with `npm install` and `npm run dev`. `npm run build` creates a static site in `dist/`. The public repository does not include local board snapshots, exports, or QA recordings.
+
+## Hosted game and board snapshot
+
+- Game: https://jalex-stark.github.io/peel/
+- Shared board and metrics: https://jalex-stark.github.io/peel/boards/first-board.html
+
+GitHub Actions tests and builds the static site on pushes to main, then deploys it to GitHub Pages. The shared board is a deliberately published frozen export; it does not follow live local board changes. New exports can be placed in public/boards/ and committed to publish another link.
+
+The hosted game saves progress in the visitor's browser. It has no backend or automatic board upload. Local assistant sharing is only available with the development server. Build for this Pages URL using `npm run build -- --base=/peel/`.
