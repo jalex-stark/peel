@@ -1,0 +1,11 @@
+node_modules/
+dist/
+artifacts/
+.DS_Store
+
+.env
+.env.*
+!.env.example
+
+# Local optimization experiment embeds a personal board
+optimize-board.mjs

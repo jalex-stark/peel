@@ -1,0 +1,20 @@
+{
+  "name": "peel-letter-game",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test game.test.js",
+    "test:browser": "node browser-check.js",
+    "dictionary": "node prepare-dictionary.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "popular-english-words": "^1.0.2",
+    "vite": "^7.0.0",
+    "word-list": "^4.1.0"
+  }
+}
