@@ -25,7 +25,7 @@ ${metric('solid','Solid core',score.solidCoreScore,`4 × ${score.solidRectangleA
 ${metric('ponds','Ponds',score.pondRank,`At least 4 cells each; areas ${score.pondAreas.join(', ')||'none'}. Pond score ${score.pondScore}; 25% of shape.`)}
 ${metric('longest','Longest word',power.longest,`${power.longestWords.join(', ')} · length score ${score.lengthScore}`)}
 ${metric('strongest','Strongest word',power.maxScrabble,`${power.maxScrabbleWords.join(', ')} · plain Scrabble value`)}
-${metric('woven','Woven region',woven.largest,'Two largest including ties, plus regions within 80% of largest.')}
+${metric('woven','Woven region',woven.largest,'At least 6 tiles: two largest including ties, plus regions at least 80% of largest.')}
 <p>Overall: 45% shape (${score.shape}), 40% commonness (${score.commonness}), 15% longest-word score (${score.lengthScore}).</p>
 <details><summary>Other shapes and word metrics</summary>${metric('diamond','Diamond fill',score.l1Density+'%',`Radius ${score.l1Radius}; ${score.l1Area} cells`)}${metric('box','Box fill',score.rectangleDensity+'%',`${score.boundsArea} cells`)}${metric('rectangle','Density² rectangle',rectangle?.value.toFixed(2)||0,'Occupied² / area')}<p>Scrabble² sum: ${power.scrabbleSquares}</p></details>
 <details><summary>Words and commonness</summary><table><tr><th>Word</th><th>Commonness</th><th>Length rank</th></tr>${score.words.map((w,i)=>`<tr><td><button class="word" data-inspect="word${i}">${w.word}</button></td><td>${w.commonness}</td><td>${w.lengthRank||'—'} / ${w.lengthCount||'—'}</td></tr>`).join('')}</table><p>Frequency percentile among words of the same length; letter-weighted mean. Missing frequency data scores zero.</p></details>

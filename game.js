@@ -336,7 +336,7 @@ export function wovenRegions(tiles,minRun=3){
   for(const id of word.ids)ids.add(id);
  }
  const qualifying=tiles.filter(tile=>across.has(tile.id)&&down.has(tile.id)),regions=connectedComponents(qualifying).sort((a,b)=>b.length-a.length||a[0].id.localeCompare(b[0].id));
- const largest=regions[0]?.length||0,highlightRegions=regions.filter(region=>region.length>=Math.min(largest*.8,regions[1]?.length??largest));
+ const largest=regions[0]?.length||0,highlightRegions=regions.filter(region=>region.length>=Math.max(6,Math.min(largest*.8,regions[1]?.length??largest)));
  return {minRun,tiles:qualifying,regions,largest,highlightRegions};
 }
 
