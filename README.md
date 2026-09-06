@@ -2,6 +2,12 @@
 
 A playable, relaxed Bananagrams-inspired solo game. Built with vanilla JavaScript and Vite.
 
+## Challenge pack
+
+Open **Work orders** in the game or [the hosted Junction Pack](https://jalex-stark.github.io/peel/challenges/): 16 standalone offline puzzles with fixed footprints, finite visible word allowlists, repair budgets, and proven optimization targets. Each has saved progress, swaps, undo/redo, hints, portable attempts, and a spoiler-gated exhaustive solution report. The main game board is preserved. See [design and solution-space analysis](challenges/DESIGN.md).
+
+`npm run challenges` regenerates the individual HTML artifacts and complete `public/challenges/analysis.json`. `node browser-check.js --challenges` solves all sixteen through browser controls. `npm test` independently brute-forces every board of at most nine tiles and compares against the constraint solver.
+
 ## Run
 
 ```sh
@@ -25,7 +31,7 @@ Score replaces the demo and tips in the existing right-hand rail without changin
 
 The score panel also starts a five-stage optimization run. Each stage offers three choices from 30 scoring modifiers covering density, ponds, crossings, direction, word length, letter variety, vowel balance, palindromes, and other board traits. Word Power adds the squared Scrabble sum divided by 100, rounded to points. One rule is added per stage, the rules stack, and a stage can be banked once the connected valid board is empty of rack tiles and meets its target. The following stage peels one letter directly into the hand.
 
-The local **QA** journal records semantic actions and resulting board states, including exact marquee rectangles, where a marquee started, selected tile IDs and coordinates, group movement, swaps, dumps, keyboard floating, panning, and validation settings. Add a timestamped note when something feels unintuitive, then copy a readable report or download the JSON. Recording can be paused or cleared. Nothing is transmitted automatically; at most 200 events are retained in browser storage.
+The local **QA** journal records semantic actions and resulting board states, including exact marquee rectangles, where a marquee started, selected tile IDs and coordinates, group movement, swaps, dumps, keyboard floating, panning, and validation settings. Add a timestamped note when something feels unintuitive, then copy a readable report or download the JSON. Recording can be paused; clearing the recent panel only clears its 200-event display buffer. Full history is retained without an event-count cap in IndexedDB and mirrored to append-only local files when development-server sharing is enabled. Browser storage quotas still apply. Download full history from QA.
 
 ## Board controls
 

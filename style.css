@@ -37,3 +37,5 @@
 .inspection-shape.caves-outline path{fill:none}.inspection-shape .cave-area{fill:#d88d3955;stroke:none}
 
 .modal.replay-modal{width:calc(100vw - 40px);max-width:1500px;height:calc(100vh - 40px);padding:44px 12px 12px;display:flex;flex-direction:column;overflow:hidden}.replay-frame{width:100%;flex:1;min-height:0;border:0}.replay-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12px;padding:6px}.replay-actions button{padding:6px 10px}.replay-actions input{max-width:210px}
+
+.challenge-link{color:var(--green);text-decoration:none;white-space:nowrap}@media(max-width:750px){header{height:auto;min-height:73px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px;gap:8px}.header-actions{flex-wrap:wrap}.challenge-link{font-size:11px}}

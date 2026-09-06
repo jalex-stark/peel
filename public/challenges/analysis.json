@@ -1,0 +1,2352 @@
+{
+  "version": 1,
+  "scope": "Exhaustive letter assignments to labelled fixed sockets. Equal letters interchangeable; rotations and reflections counted separately when valid. Only the per-level printed allowlist is used. Edit cost is Hamming distance from starting letters. No claim about unrestricted Peel boards.",
+  "levels": [
+    {
+      "level": {
+        "id": "01-crossed-wires",
+        "title": "Crossed wires",
+        "cells": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "mode": "repair",
+        "metric": "variety",
+        "description": "Two ordinary animals, one shared vowel. Repair the crossing by changing at most two sockets.",
+        "version": 1,
+        "bank": "ACRTT",
+        "words": [
+          "ACT",
+          "ARC",
+          "ART",
+          "CAR",
+          "CAT",
+          "RAT",
+          "TAR"
+        ],
+        "start": "ACRTT",
+        "locks": [],
+        "budget": 2,
+        "witness": "RCATT",
+        "target": null,
+        "summary": {
+          "total": 4,
+          "feasible": 1,
+          "optimal": 1,
+          "minChanges": 2,
+          "best": 2
+        }
+      },
+      "report": {
+        "total": 4,
+        "anchored": 4,
+        "feasible": 1,
+        "nodes": 12,
+        "best": 2,
+        "optimal": 1,
+        "minChanges": 2,
+        "distanceHistogram": {
+          "2": 1,
+          "3": 2,
+          "4": 1
+        },
+        "frontier": [
+          {
+            "changed": 2,
+            "value": 2,
+            "letters": "RCATT"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "RCATT",
+            "words": [
+              "RAT",
+              "CAT"
+            ],
+            "changed": 2,
+            "power": 5,
+            "squares": 34,
+            "crossings": 1,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "02-dog-leg",
+        "title": "Dog leg",
+        "cells": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "mode": "repair",
+        "metric": "variety",
+        "description": "A tiny routing repair. The centre is anchored; exchange the ends until both lines read correctly.",
+        "version": 1,
+        "bank": "DGGLO",
+        "words": [
+          "DOG",
+          "GOD",
+          "LOG",
+          "OLD"
+        ],
+        "start": "GGOLD",
+        "locks": [
+          2
+        ],
+        "budget": 4,
+        "witness": "GLOGD",
+        "target": null,
+        "summary": {
+          "total": 4,
+          "feasible": 4,
+          "optimal": 4,
+          "minChanges": 2,
+          "best": 2
+        }
+      },
+      "report": {
+        "total": 4,
+        "anchored": 4,
+        "feasible": 4,
+        "nodes": 9,
+        "best": 2,
+        "optimal": 4,
+        "minChanges": 2,
+        "distanceHistogram": {
+          "2": 1,
+          "3": 1,
+          "4": 2
+        },
+        "frontier": [
+          {
+            "changed": 2,
+            "value": 2,
+            "letters": "GLOGD"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "DLOGG",
+            "words": [
+              "DOG",
+              "LOG"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 41,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "GLOGD",
+            "words": [
+              "GOD",
+              "LOG"
+            ],
+            "changed": 2,
+            "power": 5,
+            "squares": 41,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "LDOGG",
+            "words": [
+              "LOG",
+              "DOG"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 41,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "LGODG",
+            "words": [
+              "LOG",
+              "GOD"
+            ],
+            "changed": 3,
+            "power": 5,
+            "squares": 41,
+            "crossings": 1,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "03-q-branch",
+        "title": "Q branch",
+        "cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "mode": "repair",
+        "metric": "power",
+        "description": "Seven tiles, two Qs, no spare vowels. Place the high-value cargo into two familiar words.",
+        "version": 1,
+        "bank": "IQQTUUZ",
+        "words": [
+          "QUIT",
+          "QUIZ"
+        ],
+        "start": "UQUQIZT",
+        "locks": [],
+        "budget": 4,
+        "witness": "QUQUIZT",
+        "target": null,
+        "summary": {
+          "total": 2,
+          "feasible": 1,
+          "optimal": 1,
+          "minChanges": 4,
+          "best": 22
+        }
+      },
+      "report": {
+        "total": 2,
+        "anchored": 2,
+        "feasible": 1,
+        "nodes": 5,
+        "best": 22,
+        "optimal": 1,
+        "minChanges": 4,
+        "distanceHistogram": {
+          "4": 1,
+          "6": 1
+        },
+        "frontier": [
+          {
+            "changed": 4,
+            "value": 22,
+            "letters": "QUQUIZT"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "QUQUIZT",
+            "words": [
+              "QUIT",
+              "QUIZ"
+            ],
+            "changed": 4,
+            "power": 22,
+            "squares": 653,
+            "crossings": 1,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "04-tax-exchange",
+        "title": "Tax exchange",
+        "cells": [
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        "mode": "optimize",
+        "metric": "squares",
+        "description": "The X is expensive. Maximize the sum of squared word values; shared letters count in both words.",
+        "version": 1,
+        "bank": "AAEERSTTX",
+        "words": [
+          "EATER",
+          "EXTRA",
+          "RATES",
+          "RESET",
+          "STARE",
+          "START",
+          "STATE",
+          "STEER",
+          "TARES",
+          "TASTE",
+          "TAXES",
+          "TEARS",
+          "TEASE",
+          "TREES"
+        ],
+        "start": "SEXTRAATE",
+        "locks": [],
+        "budget": 9,
+        "witness": "ETAXESTRA",
+        "target": 288,
+        "summary": {
+          "total": 2,
+          "feasible": 2,
+          "optimal": 1,
+          "minChanges": 0,
+          "best": 288
+        }
+      },
+      "report": {
+        "total": 2,
+        "anchored": 2,
+        "feasible": 2,
+        "nodes": 17,
+        "best": 288,
+        "optimal": 1,
+        "minChanges": 0,
+        "distanceHistogram": {
+          "0": 1,
+          "9": 1
+        },
+        "frontier": [
+          {
+            "changed": 9,
+            "value": 288,
+            "letters": "ETAXESTRA"
+          },
+          {
+            "changed": 0,
+            "value": 169,
+            "letters": "SEXTRAATE"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "ETAXESTRA",
+            "words": [
+              "EXTRA",
+              "TAXES"
+            ],
+            "changed": 9,
+            "power": 12,
+            "squares": 288,
+            "crossings": 8,
+            "variety": 2
+          },
+          {
+            "letters": "SEXTRAATE",
+            "words": [
+              "STATE",
+              "EXTRA"
+            ],
+            "changed": 0,
+            "power": 12,
+            "squares": 169,
+            "crossings": 1,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "05-earth-exchange",
+        "title": "Earth exchange",
+        "cells": [
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        "mode": "optimize",
+        "metric": "squares",
+        "description": "Split the same cargo into stronger words. There are several legal routings, but equal word values are not optimal.",
+        "version": 1,
+        "bank": "AEEHPRRST",
+        "words": [
+          "EARTH",
+          "EATER",
+          "HATER",
+          "HEART",
+          "PARSE",
+          "PARTS",
+          "PEARS",
+          "RATES",
+          "REAPS",
+          "RESET",
+          "SHAPE",
+          "SHARE",
+          "SHARP",
+          "SHEEP",
+          "SHEET",
+          "SPARE",
+          "SPEAR",
+          "STARE",
+          "STEEP",
+          "STEER",
+          "STRAP",
+          "TARES",
+          "TEARS",
+          "TEASE",
+          "TRAPS",
+          "TREES"
+        ],
+        "start": "EPEARSRTH",
+        "locks": [],
+        "budget": 9,
+        "witness": "ESHARPTER",
+        "target": 125,
+        "summary": {
+          "total": 8,
+          "feasible": 8,
+          "optimal": 1,
+          "minChanges": 0,
+          "best": 125
+        }
+      },
+      "report": {
+        "total": 8,
+        "anchored": 8,
+        "feasible": 8,
+        "nodes": 35,
+        "best": 125,
+        "optimal": 1,
+        "minChanges": 0,
+        "distanceHistogram": {
+          "0": 1,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 2,
+          "7": 1
+        },
+        "frontier": [
+          {
+            "changed": 0,
+            "value": 113,
+            "letters": "EPEARSRTH"
+          },
+          {
+            "changed": 6,
+            "value": 125,
+            "letters": "ESHARPTER"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "EPEARSRTH",
+            "words": [
+              "EARTH",
+              "PEARS"
+            ],
+            "changed": 0,
+            "power": 8,
+            "squares": 113,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "EREAPSRTH",
+            "words": [
+              "EARTH",
+              "REAPS"
+            ],
+            "changed": 2,
+            "power": 8,
+            "squares": 113,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "ESHARPTER",
+            "words": [
+              "EATER",
+              "SHARP"
+            ],
+            "changed": 6,
+            "power": 10,
+            "squares": 125,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "ESPARERTH",
+            "words": [
+              "EARTH",
+              "SPARE"
+            ],
+            "changed": 3,
+            "power": 8,
+            "squares": 113,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "HPEARSTER",
+            "words": [
+              "HATER",
+              "PEARS"
+            ],
+            "changed": 4,
+            "power": 8,
+            "squares": 113,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "HREAPSTER",
+            "words": [
+              "HATER",
+              "REAPS"
+            ],
+            "changed": 6,
+            "power": 8,
+            "squares": 113,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "HSPARETER",
+            "words": [
+              "HATER",
+              "SPARE"
+            ],
+            "changed": 7,
+            "power": 8,
+            "squares": 113,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "PHEARTRSE",
+            "words": [
+              "PARSE",
+              "HEART"
+            ],
+            "changed": 5,
+            "power": 8,
+            "squares": 113,
+            "crossings": 1,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "06-nine-sockets",
+        "title": "Nine sockets",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "mode": "repair",
+        "metric": "variety",
+        "description": "Every tile belongs to two words. Restore a fully woven 3×3 square within four changed sockets.",
+        "version": 1,
+        "bank": "AACEENRTT",
+        "words": [
+          "ACE",
+          "ACT",
+          "ANT",
+          "ARC",
+          "ARE",
+          "ART",
+          "ATE",
+          "CAN",
+          "CAR",
+          "CAT",
+          "EAR",
+          "EAT",
+          "ERA",
+          "NET",
+          "RAN",
+          "RAT",
+          "TAN",
+          "TAR",
+          "TEA",
+          "TEE",
+          "TEN"
+        ],
+        "start": "ACATRETEN",
+        "locks": [],
+        "budget": 4,
+        "witness": "CATARETEN",
+        "target": null,
+        "summary": {
+          "total": 2,
+          "feasible": 1,
+          "optimal": 1,
+          "minChanges": 4,
+          "best": 3
+        }
+      },
+      "report": {
+        "total": 2,
+        "anchored": 2,
+        "feasible": 1,
+        "nodes": 84,
+        "best": 3,
+        "optimal": 1,
+        "minChanges": 4,
+        "distanceHistogram": {
+          "4": 1,
+          "5": 1
+        },
+        "frontier": [
+          {
+            "changed": 4,
+            "value": 3,
+            "letters": "CATARETEN"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "CATARETEN",
+            "words": [
+              "CAT",
+              "CAT",
+              "ARE",
+              "TEN",
+              "ARE",
+              "TEN"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 86,
+            "crossings": 11,
+            "variety": 3
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "07-ore-processing",
+        "title": "Ore processing",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "mode": "repair",
+        "metric": "squares",
+        "description": "A compact processing block. Fix all six runs with four changed sockets; the vocabulary is intentionally small.",
+        "version": 1,
+        "bank": "DEEGGOORT",
+        "words": [
+          "DOG",
+          "DOT",
+          "EGG",
+          "EGO",
+          "GET",
+          "GOD",
+          "GOT",
+          "ORE",
+          "RED",
+          "ROD",
+          "ROT",
+          "TED",
+          "TEE",
+          "TOE",
+          "TOO"
+        ],
+        "start": "ODOGREGET",
+        "locks": [],
+        "budget": 4,
+        "witness": "DOGOREGET",
+        "target": null,
+        "summary": {
+          "total": 1,
+          "feasible": 1,
+          "optimal": 1,
+          "minChanges": 4,
+          "best": 100
+        }
+      },
+      "report": {
+        "total": 1,
+        "anchored": 1,
+        "feasible": 1,
+        "nodes": 35,
+        "best": 100,
+        "optimal": 1,
+        "minChanges": 4,
+        "distanceHistogram": {
+          "4": 1
+        },
+        "frontier": [
+          {
+            "changed": 4,
+            "value": 100,
+            "letters": "DOGOREGET"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "DOGOREGET",
+            "words": [
+              "DOG",
+              "DOG",
+              "ORE",
+              "GET",
+              "ORE",
+              "GET"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 100,
+            "crossings": 12,
+            "variety": 3
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "08-sea-of-letters",
+        "title": "Sea of letters",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "mode": "repair",
+        "metric": "variety",
+        "description": "Nine common letters with no anchor. Repair the six runs within four changed sockets.",
+        "version": 1,
+        "bank": "AAAEERRST",
+        "words": [
+          "ARE",
+          "ART",
+          "ATE",
+          "EAR",
+          "EAT",
+          "ERA",
+          "RAT",
+          "SAT",
+          "SEA",
+          "SEE",
+          "SET",
+          "TAR",
+          "TEA",
+          "TEE"
+        ],
+        "start": "ESEAARART",
+        "locks": [],
+        "budget": 4,
+        "witness": "SEAEARART",
+        "target": null,
+        "summary": {
+          "total": 1,
+          "feasible": 1,
+          "optimal": 1,
+          "minChanges": 4,
+          "best": 3
+        }
+      },
+      "report": {
+        "total": 1,
+        "anchored": 1,
+        "feasible": 1,
+        "nodes": 35,
+        "best": 3,
+        "optimal": 1,
+        "minChanges": 4,
+        "distanceHistogram": {
+          "4": 1
+        },
+        "frontier": [
+          {
+            "changed": 4,
+            "value": 3,
+            "letters": "SEAEARART"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "SEAEARART",
+            "words": [
+              "SEA",
+              "SEA",
+              "EAR",
+              "ART",
+              "EAR",
+              "ART"
+            ],
+            "changed": 4,
+            "power": 3,
+            "squares": 54,
+            "crossings": 9,
+            "variety": 3
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "09-red-line",
+        "title": "Red line",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "mode": "repair",
+        "metric": "power",
+        "description": "A second woven repair. Restore all six crossings within four changed sockets.",
+        "version": 1,
+        "bank": "AACDEERRR",
+        "words": [
+          "ACE",
+          "ARC",
+          "ARE",
+          "CAR",
+          "EAR",
+          "ERA",
+          "RED"
+        ],
+        "start": "ACARRERED",
+        "locks": [],
+        "budget": 4,
+        "witness": "CARARERED",
+        "target": null,
+        "summary": {
+          "total": 1,
+          "feasible": 1,
+          "optimal": 1,
+          "minChanges": 4,
+          "best": 5
+        }
+      },
+      "report": {
+        "total": 1,
+        "anchored": 1,
+        "feasible": 1,
+        "nodes": 19,
+        "best": 5,
+        "optimal": 1,
+        "minChanges": 4,
+        "distanceHistogram": {
+          "4": 1
+        },
+        "frontier": [
+          {
+            "changed": 4,
+            "value": 5,
+            "letters": "CARARERED"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "CARARERED",
+            "words": [
+              "CAR",
+              "CAR",
+              "ARE",
+              "RED",
+              "ARE",
+              "RED"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 100,
+            "crossings": 12,
+            "variety": 3
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "10-courtyard",
+        "title": "Courtyard",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "mode": "repair",
+        "metric": "variety",
+        "description": "Keep the central gap empty. Repair the four boundary words; the one-cell enclosure is intentional.",
+        "version": 1,
+        "bank": "AACEENTT",
+        "words": [
+          "ACE",
+          "ACT",
+          "ANT",
+          "ATE",
+          "CAN",
+          "CAT",
+          "EAT",
+          "NET",
+          "TAN",
+          "TEA",
+          "TEE",
+          "TEN"
+        ],
+        "start": "ACEATTEN",
+        "locks": [],
+        "budget": 4,
+        "witness": "ACTNETEA",
+        "target": null,
+        "summary": {
+          "total": 7,
+          "feasible": 2,
+          "optimal": 1,
+          "minChanges": 4,
+          "best": 3
+        }
+      },
+      "report": {
+        "total": 7,
+        "anchored": 7,
+        "feasible": 2,
+        "nodes": 52,
+        "best": 3,
+        "optimal": 1,
+        "minChanges": 4,
+        "distanceHistogram": {
+          "4": 2,
+          "5": 1,
+          "6": 1,
+          "8": 3
+        },
+        "frontier": [
+          {
+            "changed": 4,
+            "value": 3,
+            "letters": "ACTNETEA"
+          },
+          {
+            "changed": 6,
+            "value": 4,
+            "letters": "TEAACNET"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "ACTNETEA",
+            "words": [
+              "ACT",
+              "ANT",
+              "TEA",
+              "TEA"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 52,
+            "crossings": 4,
+            "variety": 3
+          },
+          {
+            "letters": "CATAETEN",
+            "words": [
+              "CAT",
+              "CAT",
+              "TEN",
+              "TEN"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 68,
+            "crossings": 6,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "11-four-square-pond",
+        "title": "Four-square pond",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "mode": "repair",
+        "metric": "squares",
+        "description": "A four-cell pond with twelve boundary tiles. Restore the four walls within six changed sockets, without filling the water.",
+        "version": 1,
+        "bank": "AAAABDDLLLLY",
+        "words": [
+          "BALL",
+          "LADY"
+        ],
+        "start": "ABAALLLDLADY",
+        "locks": [],
+        "budget": 6,
+        "witness": "BALLAALDLADY",
+        "target": null,
+        "summary": {
+          "total": 1,
+          "feasible": 1,
+          "optimal": 1,
+          "minChanges": 6,
+          "best": 200
+        }
+      },
+      "report": {
+        "total": 1,
+        "anchored": 1,
+        "feasible": 1,
+        "nodes": 6,
+        "best": 200,
+        "optimal": 1,
+        "minChanges": 6,
+        "distanceHistogram": {
+          "6": 1
+        },
+        "frontier": [
+          {
+            "changed": 6,
+            "value": 200,
+            "letters": "BALLAALDLADY"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "BALLAALDLADY",
+            "words": [
+              "BALL",
+              "BALL",
+              "LADY",
+              "LADY"
+            ],
+            "changed": 6,
+            "power": 8,
+            "squares": 200,
+            "crossings": 9,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "12-solid-state",
+        "title": "Solid state",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "mode": "repair",
+        "metric": "variety",
+        "description": "Sixteen tiles, eight words, no gaps. Repair this dense block within six changed sockets.",
+        "version": 1,
+        "bank": "AAAAABDDEELLLLRY",
+        "words": [
+          "AREA",
+          "BALL",
+          "BARE",
+          "BEAR",
+          "DARE",
+          "DEAD",
+          "DEAL",
+          "DEAR",
+          "DEER",
+          "LADY",
+          "LEAD",
+          "READ",
+          "REAL",
+          "REED",
+          "YARD",
+          "YEAR",
+          "YELL"
+        ],
+        "start": "ABARLLEALEADLADY",
+        "locks": [],
+        "budget": 6,
+        "witness": "BALLAREALEADLADY",
+        "target": null,
+        "summary": {
+          "total": 1,
+          "feasible": 1,
+          "optimal": 1,
+          "minChanges": 6,
+          "best": 4
+        }
+      },
+      "report": {
+        "total": 1,
+        "anchored": 1,
+        "feasible": 1,
+        "nodes": 26,
+        "best": 4,
+        "optimal": 1,
+        "minChanges": 6,
+        "distanceHistogram": {
+          "6": 1
+        },
+        "frontier": [
+          {
+            "changed": 6,
+            "value": 4,
+            "letters": "BALLAREALEADLADY"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "BALLAREALEADLADY",
+            "words": [
+              "BALL",
+              "BALL",
+              "AREA",
+              "LEAD",
+              "LADY",
+              "AREA",
+              "LEAD",
+              "LADY"
+            ],
+            "changed": 6,
+            "power": 8,
+            "squares": 282,
+            "crossings": 23,
+            "variety": 4
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "13-heavy-freight",
+        "title": "Heavy freight",
+        "cells": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "mode": "optimize",
+        "metric": "power",
+        "description": "Five tiles, twelve arrangements. Concentrate the valuable letters into one word; only the strongest word scores.",
+        "version": 1,
+        "bank": "ACPRT",
+        "words": [
+          "ACT",
+          "APT",
+          "ARC",
+          "ART",
+          "CAP",
+          "CAR",
+          "CAT",
+          "PAR",
+          "PAT",
+          "RAP",
+          "RAT",
+          "TAP",
+          "TAR"
+        ],
+        "start": "CPART",
+        "locks": [],
+        "budget": 5,
+        "witness": "CTARP",
+        "target": 7,
+        "summary": {
+          "total": 12,
+          "feasible": 12,
+          "optimal": 4,
+          "minChanges": 0,
+          "best": 7
+        }
+      },
+      "report": {
+        "total": 12,
+        "anchored": 12,
+        "feasible": 12,
+        "nodes": 26,
+        "best": 7,
+        "optimal": 4,
+        "minChanges": 0,
+        "distanceHistogram": {
+          "0": 1,
+          "2": 4,
+          "3": 4,
+          "4": 3
+        },
+        "frontier": [
+          {
+            "changed": 0,
+            "value": 5,
+            "letters": "CPART"
+          },
+          {
+            "changed": 2,
+            "value": 7,
+            "letters": "CTARP"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "CPART",
+            "words": [
+              "CAT",
+              "PAR"
+            ],
+            "changed": 0,
+            "power": 5,
+            "squares": 50,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "CPATR",
+            "words": [
+              "CAR",
+              "PAT"
+            ],
+            "changed": 2,
+            "power": 5,
+            "squares": 50,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "CRAPT",
+            "words": [
+              "CAT",
+              "RAP"
+            ],
+            "changed": 2,
+            "power": 5,
+            "squares": 50,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "CRATP",
+            "words": [
+              "CAP",
+              "RAT"
+            ],
+            "changed": 3,
+            "power": 7,
+            "squares": 58,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "CTAPR",
+            "words": [
+              "CAR",
+              "TAP"
+            ],
+            "changed": 3,
+            "power": 5,
+            "squares": 50,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "CTARP",
+            "words": [
+              "CAP",
+              "TAR"
+            ],
+            "changed": 2,
+            "power": 7,
+            "squares": 58,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "PCART",
+            "words": [
+              "PAT",
+              "CAR"
+            ],
+            "changed": 2,
+            "power": 5,
+            "squares": 50,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "PCATR",
+            "words": [
+              "PAR",
+              "CAT"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 50,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "RCAPT",
+            "words": [
+              "RAT",
+              "CAP"
+            ],
+            "changed": 3,
+            "power": 7,
+            "squares": 58,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "RCATP",
+            "words": [
+              "RAP",
+              "CAT"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 50,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "TCAPR",
+            "words": [
+              "TAR",
+              "CAP"
+            ],
+            "changed": 4,
+            "power": 7,
+            "squares": 58,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "TCARP",
+            "words": [
+              "TAP",
+              "CAR"
+            ],
+            "changed": 3,
+            "power": 5,
+            "squares": 50,
+            "crossings": 1,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "14-shared-load",
+        "title": "Shared load",
+        "cells": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "mode": "optimize",
+        "metric": "squares",
+        "description": "A crossing letter is counted twice. Move the valuable cargo to the junction and maximize squared word values.",
+        "version": 1,
+        "bank": "AEEFLST",
+        "words": [
+          "EASE",
+          "EAST",
+          "EATS",
+          "ELSE",
+          "FAST",
+          "FATE",
+          "FEAT",
+          "FEEL",
+          "FEET",
+          "FELT",
+          "FLAT",
+          "LAST",
+          "LATE",
+          "LEAF",
+          "LEFT",
+          "SAFE",
+          "SALE",
+          "SALT",
+          "SEAL",
+          "SEAT",
+          "SELF",
+          "TALE"
+        ],
+        "start": "ELFASTE",
+        "locks": [],
+        "budget": 7,
+        "witness": "SALEFTE",
+        "target": 98,
+        "summary": {
+          "total": 12,
+          "feasible": 12,
+          "optimal": 2,
+          "minChanges": 0,
+          "best": 98
+        }
+      },
+      "report": {
+        "total": 12,
+        "anchored": 12,
+        "feasible": 12,
+        "nodes": 35,
+        "best": 98,
+        "optimal": 2,
+        "minChanges": 0,
+        "distanceHistogram": {
+          "0": 1,
+          "4": 1,
+          "5": 2,
+          "6": 6,
+          "7": 2
+        },
+        "frontier": [
+          {
+            "changed": 0,
+            "value": 65,
+            "letters": "ELFASTE"
+          },
+          {
+            "changed": 5,
+            "value": 98,
+            "letters": "SALEFTE"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "ELFASTE",
+            "words": [
+              "ELSE",
+              "FAST"
+            ],
+            "changed": 0,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "FAELSET",
+            "words": [
+              "FAST",
+              "ELSE"
+            ],
+            "changed": 6,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "FESALET",
+            "words": [
+              "FELT",
+              "SALE"
+            ],
+            "changed": 6,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "FESEALT",
+            "words": [
+              "FEAT",
+              "SEAL"
+            ],
+            "changed": 7,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "LESAFET",
+            "words": [
+              "LEFT",
+              "SAFE"
+            ],
+            "changed": 6,
+            "power": 7,
+            "squares": 98,
+            "crossings": 4,
+            "variety": 2
+          },
+          {
+            "letters": "LESEATF",
+            "words": [
+              "LEAF",
+              "SEAT"
+            ],
+            "changed": 6,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "SAFELTE",
+            "words": [
+              "SALE",
+              "FELT"
+            ],
+            "changed": 4,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "SALEFTE",
+            "words": [
+              "SAFE",
+              "LEFT"
+            ],
+            "changed": 5,
+            "power": 7,
+            "squares": 98,
+            "crossings": 4,
+            "variety": 2
+          },
+          {
+            "letters": "SEFEATL",
+            "words": [
+              "SEAL",
+              "FEAT"
+            ],
+            "changed": 5,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "SELEAFT",
+            "words": [
+              "SEAT",
+              "LEAF"
+            ],
+            "changed": 7,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "SETALEF",
+            "words": [
+              "SELF",
+              "TALE"
+            ],
+            "changed": 6,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "TASELFE",
+            "words": [
+              "TALE",
+              "SELF"
+            ],
+            "changed": 6,
+            "power": 7,
+            "squares": 65,
+            "crossings": 1,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "15-budget-freight",
+        "title": "Budget freight",
+        "cells": [
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        "mode": "optimize",
+        "metric": "squares",
+        "description": "Improve the word-value total under a tight final-change budget. Temporary detours cost nothing; the finished footprint determines cost.",
+        "version": 1,
+        "bank": "AEEKPRSST",
+        "words": [
+          "EATER",
+          "PARKS",
+          "PARSE",
+          "PARTS",
+          "PEARS",
+          "PRESS",
+          "RATES",
+          "REAPS",
+          "RESET",
+          "SKATE",
+          "SPARE",
+          "SPARK",
+          "SPEAR",
+          "STAKE",
+          "STARE",
+          "STARS",
+          "STEEP",
+          "STEER",
+          "STRAP",
+          "TAKES",
+          "TARES",
+          "TEARS",
+          "TEASE",
+          "TRAPS",
+          "TREES"
+        ],
+        "start": "PSKATERSE",
+        "locks": [],
+        "budget": 5,
+        "witness": "PTEASERKS",
+        "target": 146,
+        "summary": {
+          "total": 7,
+          "feasible": 3,
+          "optimal": 1,
+          "minChanges": 0,
+          "best": 146
+        }
+      },
+      "report": {
+        "total": 7,
+        "anchored": 7,
+        "feasible": 3,
+        "nodes": 33,
+        "best": 146,
+        "optimal": 1,
+        "minChanges": 0,
+        "distanceHistogram": {
+          "0": 1,
+          "2": 1,
+          "5": 1,
+          "6": 1,
+          "8": 2,
+          "9": 1
+        },
+        "frontier": [
+          {
+            "changed": 0,
+            "value": 130,
+            "letters": "PSKATERSE"
+          },
+          {
+            "changed": 5,
+            "value": 146,
+            "letters": "PTEASERKS"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "PSKATERSE",
+            "words": [
+              "PARSE",
+              "SKATE"
+            ],
+            "changed": 0,
+            "power": 9,
+            "squares": 130,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "PSTAKERSE",
+            "words": [
+              "PARSE",
+              "STAKE"
+            ],
+            "changed": 2,
+            "power": 9,
+            "squares": 130,
+            "crossings": 1,
+            "variety": 2
+          },
+          {
+            "letters": "PTEASERKS",
+            "words": [
+              "PARKS",
+              "TEASE"
+            ],
+            "changed": 5,
+            "power": 11,
+            "squares": 146,
+            "crossings": 1,
+            "variety": 2
+          }
+        ]
+      }
+    },
+    {
+      "level": {
+        "id": "16-four-voices",
+        "title": "Four voices",
+        "cells": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "mode": "optimize",
+        "metric": "variety",
+        "description": "Four walls, four voices. Maximize distinct words around the courtyard; repeated words count only once.",
+        "version": 1,
+        "bank": "AACEENTT",
+        "words": [
+          "ACE",
+          "ACT",
+          "ANT",
+          "ATE",
+          "CAN",
+          "CAT",
+          "EAT",
+          "NET",
+          "TAN",
+          "TEA",
+          "TEE",
+          "TEN"
+        ],
+        "start": "CATAETEN",
+        "locks": [],
+        "budget": 8,
+        "witness": "TANEEACT",
+        "target": 4,
+        "summary": {
+          "total": 7,
+          "feasible": 7,
+          "optimal": 2,
+          "minChanges": 0,
+          "best": 4
+        }
+      },
+      "report": {
+        "total": 7,
+        "anchored": 7,
+        "feasible": 7,
+        "nodes": 52,
+        "best": 4,
+        "optimal": 2,
+        "minChanges": 0,
+        "distanceHistogram": {
+          "0": 1,
+          "4": 2,
+          "6": 2,
+          "8": 2
+        },
+        "frontier": [
+          {
+            "changed": 4,
+            "value": 3,
+            "letters": "ACTNETEA"
+          },
+          {
+            "changed": 4,
+            "value": 3,
+            "letters": "ANTCETEA"
+          },
+          {
+            "changed": 0,
+            "value": 2,
+            "letters": "CATAETEN"
+          },
+          {
+            "changed": 6,
+            "value": 4,
+            "letters": "TANEEACT"
+          },
+          {
+            "changed": 6,
+            "value": 4,
+            "letters": "TEAACNET"
+          }
+        ],
+        "solutions": [
+          {
+            "letters": "ACTNETEA",
+            "words": [
+              "ACT",
+              "ANT",
+              "TEA",
+              "TEA"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 52,
+            "crossings": 4,
+            "variety": 3
+          },
+          {
+            "letters": "ANTCETEA",
+            "words": [
+              "ANT",
+              "ACT",
+              "TEA",
+              "TEA"
+            ],
+            "changed": 4,
+            "power": 5,
+            "squares": 52,
+            "crossings": 4,
+            "variety": 3
+          },
+          {
+            "letters": "CATAETEN",
+            "words": [
+              "CAT",
+              "CAT",
+              "TEN",
+              "TEN"
+            ],
+            "changed": 0,
+            "power": 5,
+            "squares": 68,
+            "crossings": 6,
+            "variety": 2
+          },
+          {
+            "letters": "TANEEACT",
+            "words": [
+              "TAN",
+              "TEA",
+              "NET",
+              "ACT"
+            ],
+            "changed": 6,
+            "power": 5,
+            "squares": 52,
+            "crossings": 4,
+            "variety": 4
+          },
+          {
+            "letters": "TEAACNET",
+            "words": [
+              "TEA",
+              "TAN",
+              "ACT",
+              "NET"
+            ],
+            "changed": 6,
+            "power": 5,
+            "squares": 52,
+            "crossings": 4,
+            "variety": 4
+          },
+          {
+            "letters": "TEAECANT",
+            "words": [
+              "TEA",
+              "TEA",
+              "ACT",
+              "ANT"
+            ],
+            "changed": 8,
+            "power": 5,
+            "squares": 52,
+            "crossings": 4,
+            "variety": 3
+          },
+          {
+            "letters": "TEAENACT",
+            "words": [
+              "TEA",
+              "TEA",
+              "ANT",
+              "ACT"
+            ],
+            "changed": 8,
+            "power": 5,
+            "squares": 52,
+            "crossings": 4,
+            "variety": 3
+          }
+        ]
+      }
+    }
+  ]
+}

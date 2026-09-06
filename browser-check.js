@@ -10,6 +10,44 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));
 mkdirSync('artifacts',{recursive:true});
 const boardState=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('peel-game')));
 async function clickCell(x,y){const p=await page.evaluate(({x,y})=>{const r=document.querySelector('#board').getBoundingClientRect(),m=new DOMMatrix(getComputedStyle(document.querySelector('#plane')).transform);return {x:r.left+m.e+(x*48+22)*m.a,y:r.top+m.f+(y*48+22)*m.d};},{x,y});await page.mouse.click(p.x,p.y);}
+if(process.argv[2]==='--challenges'){
+ try{
+  const pack=JSON.parse(readFileSync('public/challenges/analysis.json','utf8'));
+  const requests=[];page.on('request',r=>requests.push(r.url()));
+  for(const {level:l} of pack.levels){
+   await page.goto(new URL('./public/challenges/'+l.id+'.html',import.meta.url).href);
+   assert.equal(await page.locator('.tile').count(),l.bank.length);
+   await page.locator('#submit').click();assert.ok(!(await page.locator('#notice').innerText()).startsWith('Accepted'));
+   // Exercise the actual player, never write its board state directly.
+   let swaps=0;
+   while(await page.locator('.tile > span').allTextContents().then(a=>a.join(''))!==l.witness){
+    await page.locator('#hint').click();const hinted=page.locator('.tile.hinted');assert.equal(await hinted.count(),2);
+    const ids=await hinted.evaluateAll(es=>es.map(e=>e.dataset.i));
+    await page.locator('[data-i="'+ids[0]+'"]').click();await page.locator('[data-i="'+ids[1]+'"]').click();assert.ok(++swaps<l.bank.length);
+   }
+   await page.locator('#submit').click();assert.match(await page.locator('#notice').innerText(),/^Accepted/);
+   assert.equal(await page.locator('#metric').innerText(),String(checkValue(l)));
+   await page.reload();assert.equal((await page.locator('.tile > span').allTextContents()).join(''),l.witness);
+   await page.locator('#analysis summary').click();await page.waitForFunction(()=>document.querySelector('#report').textContent.includes('Exhaustive search'));assert.match(await page.locator('#report').innerText(),/Exhaustive search/);
+  }
+  function checkValue(l){return pack.levels.find(p=>p.level.id===l.id).report.solutions.find(r=>r.letters===l.witness)[l.metric];}
+  const l=pack.levels[13].level;await page.goto(new URL('./public/challenges/'+l.id+'.html',import.meta.url).href);await page.locator('#reset').click();
+  const initial=(await page.locator('.tile > span').allTextContents()).join('');
+  await page.locator('.tile').nth(0).click();await page.locator('.tile').nth(0).click();assert.equal(await page.locator('.tile.selected').count(),0);
+  const a=await page.locator('.tile').nth(0).boundingBox(),b=await page.locator('.tile').nth(1).boundingBox();
+  await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2,b.y+b.height/2,{steps:6});await page.mouse.up();
+  const moved=(await page.locator('.tile > span').allTextContents()).join('');assert.notEqual(moved,initial);await page.keyboard.press('z');assert.equal((await page.locator('.tile > span').allTextContents()).join(''),initial);await page.keyboard.press('y');assert.equal((await page.locator('.tile > span').allTextContents()).join(''),moved);
+  await page.locator('#reset').click();await page.screenshot({path:'artifacts/screenshot-challenge.png',fullPage:true});
+  const downloadPromise=page.waitForEvent('download');await page.locator('#download').click();const dl=await downloadPromise;await dl.saveAs('artifacts/challenge-offline.html');
+  await page.goto(new URL('./artifacts/challenge-offline.html',import.meta.url).href);assert.equal(await page.locator('.tile').count(),7);
+  const code='PEELWORKS1.'+Buffer.from(JSON.stringify({level:l.id,version:l.version,letters:l.witness})).toString('base64');page.once('dialog',d=>d.accept(code));await page.locator('#import').click();await page.locator('#submit').click();assert.match(await page.locator('#notice').innerText(),/^Accepted/);
+  await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.goto(new URL('./public/challenges/index.html',import.meta.url).href);assert.equal(await page.locator('.level-card').count(),16);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:'artifacts/screenshot-challenge-pack.png',fullPage:true});
+  assert.ok(!requests.some(u=>u.startsWith('http')),'Standalone artifacts must not require network');assert.deepEqual(errors,[]);
+  console.log('Passed: all 16 offline challenges solved through real input, targets, persistence, drag, deselect, undo/redo, hints, reports, export/import and mobile layout.');
+ }finally{await browser.close();}process.exit(0);
+}
 if(process.argv[2]==='--replay'){
  try{
   await page.goto(new URL('./artifacts/peel-replay.html',import.meta.url).href);await page.locator('#metric').selectOption('coverage');
