@@ -1,3 +1,5 @@
+import {openHistoryStore} from './history-store.js';
+import {hullInspection} from './score-inspection.js';
 import {buildReplay,createReplayArtifact,distinctReplayEvents,replayStateKey} from './replay.js';
 import {createBoardArtifact} from './board-artifact.js';
 import {INITIAL,PEELS,initialTiles,getWords,findBoardMatches,validate,canMove,findSuggestion,scoreBoard,SCORE_MODIFIERS,scoreWithModifiers} from './game.js';
@@ -61,15 +63,12 @@ function showScoreInspection(){
   const geometry=inspectedGeometry?.[scoreInspection==='coverage'?'hull':scoreInspection];if(!geometry)return;
   const layer=document.createElement('div');layer.className='score-inspection-layer';
   if(scoreInspection==='hull'||scoreInspection==='coverage'){
-   const caves=scoreInspection==='coverage';
+   const caves=scoreInspection==='coverage',inspection=hullInspection(board,geometry);
    $('inspection-caption').textContent=caves?`Caves · ${geometry.area-board.length-geometry.enclosedArea} square units open inside hull`:`Convex hull · ${board.length} tiles / ${geometry.area}`;
    $('inspection-caption').hidden=false;
-   layer.innerHTML=`<svg class="inspection-shape hull-outline ${caves?'caves-outline':''}" aria-hidden="true"><path d="M${geometry.vertices.map(p=>`${p.x*48-2},${p.y*48-2}`).join('L')}Z" vector-effect="non-scaling-stroke"/>${hullContactMarkers(board,geometry).map(p=>`<circle class="hull-contact" data-contact="${p.kind}" cx="${p.x*48-2}" cy="${p.y*48-2}" r="5" vector-effect="non-scaling-stroke"/>`).join('')}</svg>`;
+   layer.innerHTML=`<svg class="inspection-shape hull-outline ${caves?'caves-outline':''}" aria-hidden="true"><path d="${inspection.path}" vector-effect="non-scaling-stroke"/>${inspection.contacts.map(p=>`<circle class="hull-contact" data-contact="${p.kind}" cx="${p.x*48-2}" cy="${p.y*48-2}" r="5" vector-effect="non-scaling-stroke"/>`).join('')}</svg>`;
    if(caves){
-    const hullPath=`M${geometry.vertices.map(p=>`${p.x*48-2},${p.y*48-2}`).join('L')}Z`;
-    const filled=[...board,...geometry.enclosedRegions.flatMap(region=>region.cells)];
-    const holes=filled.map(p=>`M${p.x*48-2},${p.y*48-2}h48v48h-48Z`).join('');
-    layer.insertAdjacentHTML('beforeend',`<svg class="inspection-shape cave-shading" aria-hidden="true"><path class="cave-area" d="${hullPath}${holes}" fill-rule="evenodd"/></svg>`);
+    layer.insertAdjacentHTML('beforeend',`<svg class="inspection-shape cave-shading" aria-hidden="true"><path class="cave-area" d="${inspection.cavesPath}" fill-rule="evenodd"/></svg>`);
    }
   }else if(scoreInspection==='diamond'){
    layer.innerHTML=`<svg class="inspection-shape" aria-hidden="true"><path d="${diamondBoundary(geometry)}" vector-effect="non-scaling-stroke"/><circle cx="${geometry.x*48+22}" cy="${geometry.y*48+22}" r="5"/></svg><span class="shape-label" style="left:${geometry.x*48}px;top:${(geometry.y-geometry.radius)*48-27}px">L1 radius ${geometry.radius} · ${geometry.area} cells</span>`;
@@ -137,7 +136,7 @@ function openBoardShare(){
  modal(`<h2>Keep this position.</h2><section class="local-sharing" ${import.meta.env.DEV?'':'hidden'}><label><input id="local-sharing-toggle" type="checkbox" ${localSharing?'checked':''}> Live local sharing</label><p>Keep a copy of this browser’s board, dictionary changes, and active modifiers in the project so the assistant can inspect it. No external service.</p><div id="local-sharing-status" role="status"></div><button id="local-share-now">Share current position now</button></section><p>Export every tile on the board, in your rack, and in the bunch. Paste a code or load a JSON file to restore a position. Dictionary preferences stay local.</p><div class="board-share-actions"><button id="position-copy">Copy board code</button><button id="position-download">Download JSON</button><button id="position-artifact">Download board & metrics HTML</button></div><label for="position-code">Board code or JSON</label><textarea id="position-code" rows="5" spellcheck="false" aria-label="Board code or JSON"></textarea><div id="position-message" role="status"></div><div class="board-share-actions"><button id="position-import">Load this position</button><label class="file-label">Open JSON file<input id="position-file" type="file" accept=".json,application/json"></label></div><p>Loading replaces this board. Undo restores your previous position.</p>`);
  $('position-code').value=code;
  updateSharingStatus();
- $('local-sharing-toggle').onchange=e=>{localSharing=e.target.checked;try{localStorage.setItem('peel-local-sharing',String(localSharing));}catch{}if(localSharing)scheduleLocalShare(true);else clearTimeout(localShareTimer);updateSharingStatus();};
+ $('local-sharing-toggle').onchange=e=>{localSharing=e.target.checked;try{localStorage.setItem('peel-local-sharing',String(localSharing));}catch{}if(localSharing){scheduleLocalShare(true);syncHistory();}else clearTimeout(localShareTimer);updateSharingStatus();};
  $('local-share-now').onclick=()=>scheduleLocalShare(true);
  $('position-copy').onclick=async()=>{try{await navigator.clipboard.writeText(code);$('position-message').textContent='Board code copied.';qaRecord('position.copy');}catch{$('position-code').value=code;$('position-code').focus();$('position-code').select();$('position-message').textContent='Code selected. Press Cmd/Ctrl+C to copy.';}};
  $('position-artifact').onclick=()=>{
@@ -248,23 +247,51 @@ function openDictionary(initial=''){
 const QA_STORAGE='peel-qa-journal-v1';
 let qaJournal={active:true,startedAt:new Date().toISOString(),events:[]};
 try{const saved=JSON.parse(localStorage.getItem(QA_STORAGE));if(saved&&Array.isArray(saved.events))qaJournal=saved;}catch{}
+let qaSequence=Number(localStorage.getItem('peel-qa-sequence'))||Math.max(0,...qaJournal.events.map(e=>Number.isFinite(e.sequence)?e.sequence:0));
+function nextQaSequence(){qaSequence++;try{localStorage.setItem('peel-qa-sequence',String(qaSequence));}catch{}return qaSequence;}
+const historyStore=openHistoryStore();let historyWrite=Promise.resolve(),historySyncing=false,historyRetry=null,historyFailure='',historyUnstored=new Map();
+function archiveHistory(events){
+ const copies=structuredClone(events);
+ historyWrite=historyWrite.then(()=>historyStore.append(copies)).then(()=>{historyFailure='';updateHistoryStatus();syncHistory();}).catch(error=>{for(const event of copies)historyUnstored.set(event.eventId||`${event.at}:${event.sequence}:${event.action}`,event);historyFailure='Browser history storage failed. Keeping pending events in memory and retrying the local archive.';toast(historyFailure);syncHistory();});
+ return historyWrite;
+}
+async function syncHistory(){
+ if(!import.meta.env.DEV||!localSharing||historySyncing)return;
+ historySyncing=true;clearTimeout(historyRetry);
+ try{while(localSharing){
+  if(historyUnstored.size){const pending=[...historyUnstored.entries()].slice(0,40);const events=pending.map(([id,event])=>({...event,eventId:id}));const response=await fetch('/__peel/history',{method:'POST',headers:{'Content-Type':'application/json','X-Peel-Local':'1'},body:JSON.stringify({clientId:localClientId,events})});if(!response.ok)throw Error('Archive unavailable');for(const [id] of pending)historyUnstored.delete(id);continue;}
+  const batch=await historyStore.pending();if(!batch.length)break;
+  const response=await fetch('/__peel/history',{method:'POST',headers:{'Content-Type':'application/json','X-Peel-Local':'1'},body:JSON.stringify({clientId:localClientId,events:batch.map(r=>r.event)})});
+  if(!response.ok)throw Error('Local history archive unavailable');await historyStore.acknowledge(batch);
+ }}catch{historyRetry=setTimeout(syncHistory,5000);}finally{historySyncing=false;updateHistoryStatus();}
+}
+async function updateHistoryStatus(){
+ const label=$('history-status');if(!label)return;
+ try{const count=await historyStore.count(),pending=(await historyStore.pending(1)).length;label.textContent=historyFailure||`${count.toLocaleString()} archived actions · ${import.meta.env.DEV&&localSharing?(pending?'disk sync pending':'copied to local disk'):'saved in this browser'}`;}catch{label.textContent='History storage unavailable.';}
+}
+window.addEventListener('online',syncHistory);
+navigator.storage?.persist?.().catch(()=>{});
 const REPLAY_STORAGE='peel-replay-history-v1';
 let replayHistory=[];
 try{replayHistory=JSON.parse(localStorage.getItem(REPLAY_STORAGE))||[];}catch{}
 replayHistory=distinctReplayEvents([...new Map([...replayHistory,...qaJournal.events].map(e=>[`${e.at}:${e.sequence}`,e])).values()].sort((a,b)=>Date.parse(a.at)-Date.parse(b.at))).slice(-500);
+archiveHistory([...replayHistory,...qaJournal.events]);
 function retainReplay(event){
+ archiveHistory([event]);
  const clean=distinctReplayEvents([event])[0];if(!clean)return;
  if(!replayHistory.length||replayStateKey(clean.state)!==replayStateKey(replayHistory.at(-1).state))replayHistory.push(clean);
  replayHistory=replayHistory.slice(-500);
- while(replayHistory.length){try{localStorage.setItem(REPLAY_STORAGE,JSON.stringify(replayHistory));break;}catch{if(replayHistory.length===1)break;replayHistory.splice(0,Math.max(1,Math.floor(replayHistory.length*.1)));}}
+ try{localStorage.setItem(REPLAY_STORAGE,JSON.stringify(replayHistory));}catch{}
  scheduleLocalShare();
 }
 let replayURL=null;
-async function openReplay(events=replayHistory){
+async function openReplay(events=null){
  if(!commonRanks||!dictionary){toast('Word data is still loading. Try Replay again in a moment.');return;}
  pause();modal('<h2>Building replay…</h2><p>Scoring each recorded board with the same rules.</p>');
  const pending=$('modal-root').firstElementChild;
  try{
+  await historyWrite;
+  if(!events)events=await historyStore.all();
   const result=await buildReplay(events,{frequencyRanks:commonRanks,dictionary});
   if($('modal-root').firstElementChild!==pending)return;
   if(replayURL)URL.revokeObjectURL(replayURL);replayURL=URL.createObjectURL(new Blob([createReplayArtifact(result)],{type:'text/html'}));
@@ -280,7 +307,7 @@ function qaTile(id){const tile=board.find(item=>item.id===id)||rack.find(item=>i
 function qaSelection(){return [...selected].map(qaTile);}
 function qaRecord(action,details={}){
  if(!qaJournal.active)return;
- qaJournal.events.push({sequence:(replayHistory.at(-1)?.at||'')+1,at:new Date().toISOString(),action,tool,details,selection:qaSelection(),state:{board:board.map(({id,l,x,y})=>({id,l,x,y})),rack:rack.map(({id,l})=>({id,l})),bunch:bag.length,view:{x:Math.round(pan.x),y:Math.round(pan.y),zoom}}});
+ qaJournal.events.push({eventId:crypto.randomUUID(),sequence:nextQaSequence(),at:new Date().toISOString(),action,tool,details,selection:qaSelection(),dictionaryOverrides:structuredClone(dictionaryOverrides),modifierIds:[...scoreRun.modifierIds],scoringVersion:'occupied-hull-max-length-v1',state:{board:board.map(({id,l,x,y})=>({id,l,x,y})),rack:rack.map(({id,l})=>({id,l})),bag:bag.map(({id,l})=>({id,l})),total,bunch:bag.length,view:{x:Math.round(pan.x),y:Math.round(pan.y),zoom}}});
  if(qaJournal.events.length>200)qaJournal.events.splice(0,qaJournal.events.length-200);
  retainReplay(qaJournal.events.at(-1));
  qaSave();
@@ -299,13 +326,14 @@ function qaReport(){
 }
 function renderQaPanel(){
  const root=$('qa-root');
- root.innerHTML=`<aside class="qa-panel" aria-label="QA journal"><div class="qa-panel-head"><div><div class="qa-kicker"><span class="record-dot ${qaJournal.active?'':'paused'}"></span> LOCAL QA JOURNAL</div><h2>${qaJournal.events.length} actions</h2></div><button class="modal-close" id="qa-close" aria-label="Close QA journal">${icon('x')}</button></div><p class="qa-privacy">Actions stay in this browser. When Live local sharing is enabled on the development server, board-changing replay frames also sync to the local project.</p><label class="qa-note-label" for="qa-note">Capture what felt unintuitive</label><textarea id="qa-note" rows="3" placeholder="For example: I expected the crossing word to stay selected…"></textarea><button class="qa-primary" id="qa-add-note">Add note at this moment</button><div class="qa-actions"><button id="qa-toggle">${qaJournal.active?'Pause recording':'Resume recording'}</button><button id="qa-copy">Copy report</button><button id="qa-download">Download JSON</button><button id="qa-clear">Clear</button></div><div class="qa-events">${qaJournal.events.length?qaJournal.events.slice(-50).reverse().map(event=>`<article><time>#${event.sequence} · ${new Date(event.at).toLocaleTimeString()}</time><strong>${event.action}</strong><p>${qaDescribe(event).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')}</p></article>`).join(''):'<div class="qa-empty">Actions will appear here as you play.</div>'}</div></aside>`;
+ root.innerHTML=`<aside class="qa-panel" aria-label="QA journal"><div class="qa-panel-head"><div><div class="qa-kicker"><span class="record-dot ${qaJournal.active?'':'paused'}"></span> LOCAL QA JOURNAL</div><h2>${qaJournal.events.length} actions</h2></div><button class="modal-close" id="qa-close" aria-label="Close QA journal">${icon('x')}</button></div><p class="qa-privacy">All recorded actions are archived in IndexedDB without an event limit. This panel shows the latest 200. Live local sharing also writes incremental JSONL files to the local project.</p><p id="history-status" class="qa-privacy" role="status">Reading archive…</p><label class="qa-note-label" for="qa-note">Capture what felt unintuitive</label><textarea id="qa-note" rows="3" placeholder="For example: I expected the crossing word to stay selected…"></textarea><button class="qa-primary" id="qa-add-note">Add note at this moment</button><div class="qa-actions"><button id="qa-toggle">${qaJournal.active?'Pause recording':'Resume recording'}</button><button id="qa-copy">Copy report</button><button id="qa-download">Download full history JSON</button><button id="qa-clear">Clear recent panel</button></div><div class="qa-events">${qaJournal.events.length?qaJournal.events.slice(-50).reverse().map(event=>`<article><time>#${event.sequence} · ${new Date(event.at).toLocaleTimeString()}</time><strong>${event.action}</strong><p>${qaDescribe(event).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')}</p></article>`).join(''):'<div class="qa-empty">Actions will appear here as you play.</div>'}</div></aside>`;
+ updateHistoryStatus();
  $('qa-close').onclick=()=>root.innerHTML='';
  $('qa-toggle').onclick=()=>{qaJournal.active=!qaJournal.active;qaSave();renderQaPanel();};
  $('qa-add-note').onclick=()=>{const note=$('qa-note').value.trim();if(!note)return;const wasActive=qaJournal.active;qaJournal.active=true;qaRecord('qa.note',{note});qaJournal.active=wasActive;qaSave();renderQaPanel();};
  $('qa-copy').onclick=async()=>{const report=qaReport();try{await navigator.clipboard.writeText(report);}catch{const area=document.createElement('textarea');area.value=report;document.body.append(area);area.select();document.execCommand('copy');area.remove();}toast('QA report copied. Paste it into your feedback.');};
- $('qa-download').onclick=()=>{const blob=new Blob([JSON.stringify({...qaJournal,currentState:{board,rack,bag,selection:qaSelection(),pan,zoom,autoCheck}},null,2)],{type:'application/json'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`peel-qa-${new Date().toISOString().replaceAll(':','-')}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),0);};
- $('qa-clear').onclick=()=>{replayHistory=[];try{localStorage.removeItem(REPLAY_STORAGE);}catch{}qaJournal={active:qaJournal.active,startedAt:new Date().toISOString(),events:[]};qaSave();renderQaPanel();};
+ $('qa-download').onclick=async()=>{await historyWrite;const events=await historyStore.all();const blob=new Blob([JSON.stringify({...qaJournal,events,currentState:{board,rack,bag,selection:qaSelection(),pan,zoom,autoCheck}},null,2)],{type:'application/json'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`peel-qa-${new Date().toISOString().replaceAll(':','-')}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),0);};
+ $('qa-clear').onclick=()=>{qaJournal={active:qaJournal.active,startedAt:new Date().toISOString(),events:[]};qaSave();renderQaPanel();};
  $('qa-note').focus();
 }
 qaSave();

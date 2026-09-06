@@ -15,6 +15,9 @@ if(process.argv[2]==='--replay'){
   await page.goto(new URL('./artifacts/peel-replay.html',import.meta.url).href);await page.locator('#metric').selectOption('coverage');
   assert.equal(await page.locator('#value').innerText(),'79');await page.locator('#scrub').fill('85');assert.equal(await page.locator('#value').innerText(),'86');
   assert.equal(await page.locator('#board .tile').count(),144);assert.match(await page.locator('#validity').innerText(),/Connected valid/);
+  const cavePath=await page.locator('.metric-inspection .caves').getAttribute('d');await page.locator('#scrub').fill('0');assert.notEqual(await page.locator('.metric-inspection .caves').getAttribute('d'),cavePath);await page.locator('#scrub').fill('85');
+  for(const [metric,selector] of [['hull','.hull-boundary'],['solid','.solid-inspection'],['ponds','.ponds-inspection'],['longest','.longest-inspection'],['strongest','.strongest-inspection'],['commonness','.heat']]){await page.locator('#metric').selectOption(metric);assert.ok(await page.locator('.metric-inspection '+selector).count()>0);}
+  await page.locator('#metric').selectOption('coverage');
   await page.screenshot({path:'artifacts/screenshot-replay.png',fullPage:true});
   await page.locator('#scrub').fill('0');await page.locator('#milestone').click();assert.ok(Number(await page.locator('#scrub').inputValue())>0);
   await page.locator('#play').click();await page.waitForTimeout(1100);await page.locator('#play').click();
@@ -39,6 +42,14 @@ if(process.argv[2]==='--hosted'){
 }
 try{
  await page.goto('http://localhost:5173');
+ await page.evaluate(async()=>{
+  const {openHistoryStore}=await import('/history-store.js'),name='peel-history-test-'+crypto.randomUUID(),store=openHistoryStore(name);
+  const events=Array.from({length:750},(_,i)=>({eventId:'test'+i,at:new Date(i*1000).toISOString(),action:'move',state:{board:[],rack:[],bunch:0}}));
+  await store.append([...events,...events.slice(0,20)]);if(await store.count()!==750)throw Error('History was truncated or migration duplicate failed');
+  const pending=await store.pending(40);await store.acknowledge(pending);if((await store.pending(1000)).length!==710)throw Error('Archive acknowledgement mismatch');
+  await store.close();const reopened=openHistoryStore(name);if((await reopened.all()).length!==750)throw Error('History did not survive reopen');await reopened.close();indexedDB.deleteDatabase(name);
+ });
+
  await page.waitForFunction(()=>document.querySelector('#check').classList.contains('enabled')&&document.querySelectorAll('#plane .tile[data-id]').length===21);
  await page.locator('#finder-open').click();await page.locator('#find-input').fill('st');
  assert.equal(await page.locator('.find-match').count(),5,'finder highlights every tile touched by matching n-grams');

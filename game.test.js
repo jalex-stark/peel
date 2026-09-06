@@ -221,7 +221,7 @@ test('replay removes view-only repeats, preserves undo, and scores all frames co
  const board=[{id:'a',l:'I',x:0,y:0},{id:'b',l:'T',x:1,y:0}];
  const event=(sequence,action,tiles)=>({sequence,at:new Date(1700000000000+sequence*1000).toISOString(),action,state:{board:tiles,rack:[],bunch:4}});
  const events=[event(1,'initial',board),event(2,'view.pan',[...board].reverse()),event(3,'group.move',[board[0],{...board[1],x:2}]),event(4,'history.undo',board)];
- assert.equal(distinctReplayEvents(events).length,3);
+ assert.equal(distinctReplayEvents(events).length,3);assert.deepEqual(distinctReplayEvents([events[0],events[2],events[1],events[3]]).map(e=>e.sequence),[1,3,4]);
  const replay=await buildReplay(events,{dictionary:new Set(['IT'])});
  assert.deepEqual(replay.frames.map(f=>f.valid),[true,false,true]);assert.deepEqual(replay.frames[1].changed,['b']);
  assert.deepEqual(replay.frames[0].metrics,replay.frames[2].metrics);assert.equal(replay.frames[0].metrics.overall,scoreBoard(board).overall);
@@ -229,4 +229,26 @@ test('replay removes view-only repeats, preserves undo, and scores all frames co
  assert.match(createReplayArtifact(replay),/replay-data/);
  assert.equal(distinctReplayEvents([{state:{board:[{id:'bad',l:'<',x:0,y:0}],rack:[]}}]).length,0);
  assert.equal((await buildReplay([])).frames.length,0);
+});
+
+test('shared inspections match scored regions and replay frames',async()=>{
+ const {scoreInspection}=await import('./score-inspection.js');const {buildReplay,distinctReplayEvents}=await import('./replay.js');
+ const ring=Array.from({length:16},(_,i)=>({id:`s${i}`,l:'A',x:i%4,y:Math.floor(i/4)})).filter(t=>t.x===0||t.x===3||t.y===0||t.y===3);
+ const score=scoreBoard(ring),inspection=scoreInspection(ring,score);
+ assert.equal(inspection.hull.contacts.length,16);assert.equal((inspection.ponds.match(/M/g)||[]).length,4);
+ const replay=await buildReplay([{at:new Date().toISOString(),action:'move',state:{board:ring,rack:[],bunch:0}}]);assert.deepEqual(replay.frames[0].inspection,inspection);
+ const events=Array.from({length:2501},(_,i)=>({sequence:i+1,action:'move',state:{board:[{id:'a',l:'A',x:i%2,y:0}],rack:[],bunch:0}}));
+ assert.equal(distinctReplayEvents(events).length,2501,'replay input no longer silently truncates at 2000');
+});
+
+test('disk history stores immutable batches and retries without overwriting old events',async t=>{
+ const fs=await import('node:fs/promises'),os=await import('node:os'),path=await import('node:path');const {appendHistory}=await import('./history-archive.js');
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'peel-history-test-'));t.after(()=>fs.rm(root,{recursive:true,force:true}));
+ const events=Array.from({length:250},(_,i)=>({eventId:`e${i}`,action:'move',state:{board:[]}}));
+ for(let i=0;i<events.length;i+=100)await appendHistory(root,'test',events.slice(i,i+100));
+ await appendHistory(root,'test',events.slice(0,100));
+ const directory=path.join(root,'artifacts/history/test'),files=await fs.readdir(directory);assert.equal(files.length,3);
+ const stored=(await Promise.all(files.map(f=>fs.readFile(path.join(directory,f),'utf8')))).join('').trim().split('\n').map(line=>JSON.parse(line));
+ assert.equal(stored.length,250);assert.equal(new Set(stored.map(r=>r.event.eventId)).size,250);
+ await assert.rejects(()=>appendHistory(root,'../escape',events.slice(0,1)),/Invalid client/);
 });
