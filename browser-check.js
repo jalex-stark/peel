@@ -10,6 +10,17 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));
 mkdirSync('artifacts',{recursive:true});
 const boardState=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('peel-game')));
 async function clickCell(x,y){const p=await page.evaluate(({x,y})=>{const r=document.querySelector('#board').getBoundingClientRect(),m=new DOMMatrix(getComputedStyle(document.querySelector('#plane')).transform);return {x:r.left+m.e+(x*48+22)*m.a,y:r.top+m.f+(y*48+22)*m.d};},{x,y});await page.mouse.click(p.x,p.y);}
+if(process.argv[2]==='--replay'){
+ try{
+  await page.goto(new URL('./artifacts/peel-replay.html',import.meta.url).href);await page.locator('#metric').selectOption('coverage');
+  assert.equal(await page.locator('#value').innerText(),'79');await page.locator('#scrub').fill('85');assert.equal(await page.locator('#value').innerText(),'86');
+  assert.equal(await page.locator('#board .tile').count(),144);assert.match(await page.locator('#validity').innerText(),/Connected valid/);
+  await page.screenshot({path:'artifacts/screenshot-replay.png',fullPage:true});
+  await page.locator('#scrub').fill('0');await page.locator('#milestone').click();assert.ok(Number(await page.locator('#scrub').inputValue())>0);
+  await page.locator('#play').click();await page.waitForTimeout(1100);await page.locator('#play').click();
+  assert.deepEqual(errors,[]);console.log('Passed: recovered 86-frame replay, coverage 79 to 86, valid best navigation and playback.');
+ }finally{await browser.close();}process.exit(0);
+}
 if(process.argv[2]==='--hosted'){
  const url=process.argv[3];const requests=[];page.on('request',r=>requests.push(r.url()));
  try{
@@ -66,6 +77,10 @@ try{
  const candidate=freeIds[0];await page.locator(`#plane [data-id="${candidate}"]`).click();await page.keyboard.press('Delete');
  assert.equal(await page.locator(`#plane [data-id="${candidate}"]`).count(),0);assert.equal(await page.locator('#plane .bad').count(),0);assert.match(await page.locator('#status').innerText(),/All words connect/);
  await page.locator('#undo').click();assert.deepEqual((await boardState()).board,original);await page.locator('#free-tiles').click();assert.equal(await page.locator('#plane .free-tile').count(),0);
+ const beforeReplay=await boardState();await page.locator('#replay-open').click();
+ const replayFrame=page.frameLocator('.replay-frame');await replayFrame.locator('#chart').waitFor();
+ await replayFrame.locator('#metric').selectOption('coverage');await replayFrame.locator('#next').click();
+ assert.deepEqual(await boardState(),beforeReplay,'replay never changes the playable board');await page.locator('#modal-root .modal-close').click();
  await page.locator('#board-share').click();const portable=await page.locator('#position-code').inputValue();assert.ok(portable.startsWith('PEEL1.'));
  await page.locator('#local-share-now').click();await page.waitForFunction(()=>document.querySelector('#local-sharing-status').textContent.startsWith('Shared locally'));
  const sharingId=await page.evaluate(()=>localStorage.getItem('peel-client-id')),sharedFile=`artifacts/live-boards/${sharingId}.json`;

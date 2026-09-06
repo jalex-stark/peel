@@ -78,3 +78,11 @@ Run the full game with `npm install` and `npm run dev`. `npm run build` creates 
 GitHub Actions tests and builds the static site on pushes to main, then deploys it to GitHub Pages. The shared board is a deliberately published frozen export; it does not follow live local board changes. New exports can be placed in public/boards/ and committed to publish another link.
 
 The hosted game saves progress in the visitor's browser. It has no backend or automatic board upload. Local assistant sharing is only available with the development server. Build for this Pages URL using `npm run build -- --base=/peel/`.
+
+## Replay
+
+**Replay** opens a viewer of retained board-changing states. Scrub or play through edits, choose a score metric, and jump to the next best value achieved on a connected valid board with an empty rack. The blue timeline includes intermediate invalid arrangements; gold tracks valid bests. Undo steps and score dips remain visible. Tile moves and words gained/lost explain each step. Choose edit spacing to skip idle time or elapsed-time spacing to see the real timestamps.
+
+All frames are recalculated with the same current scoring rules and dictionary; these are comparable retrospective scores, not claims about the score displayed under older formulas. History may start mid-session. Existing retained QA events are migrated; a separate replay history keeps up to 500 changing states, with older frames trimmed if browser storage is full. Recording respects the QA pause toggle, and clearing QA clears retained replay history too.
+
+Download replay HTML for an offline viewer or load a QA/replay JSON file from the Replay dialog. Playback never edits the live board. Live local sharing includes sanitized replay states for assistant inspection on the development server. The hosted game keeps replay history in the visitor's browser; publishing the viewer does not publish anyone's history.

@@ -215,3 +215,18 @@ test('enclosed hull coverage counts every gap separately from occupied hull fill
  const corner=scoreBoard(ring.filter(t=>!['e0','e2','e6','e8'].includes(t.id)));assert.equal(corner.enclosedArea,1);assert.equal(corner.pondRank,0);assert.ok(corner.hullDensity<=100);
  assert.equal(boardScoreGeometry(ring,score).hull.enclosedArea,1);
 });
+
+test('replay removes view-only repeats, preserves undo, and scores all frames consistently',async()=>{
+ const {buildReplay,distinctReplayEvents,createReplayArtifact}=await import('./replay.js');
+ const board=[{id:'a',l:'I',x:0,y:0},{id:'b',l:'T',x:1,y:0}];
+ const event=(sequence,action,tiles)=>({sequence,at:new Date(1700000000000+sequence*1000).toISOString(),action,state:{board:tiles,rack:[],bunch:4}});
+ const events=[event(1,'initial',board),event(2,'view.pan',[...board].reverse()),event(3,'group.move',[board[0],{...board[1],x:2}]),event(4,'history.undo',board)];
+ assert.equal(distinctReplayEvents(events).length,3);
+ const replay=await buildReplay(events,{dictionary:new Set(['IT'])});
+ assert.deepEqual(replay.frames.map(f=>f.valid),[true,false,true]);assert.deepEqual(replay.frames[1].changed,['b']);
+ assert.deepEqual(replay.frames[0].metrics,replay.frames[2].metrics);assert.equal(replay.frames[0].metrics.overall,scoreBoard(board).overall);
+ assert.equal(replay.frames[2].action,'history.undo');assert.equal(replay.sourceEvents,4);
+ assert.match(createReplayArtifact(replay),/replay-data/);
+ assert.equal(distinctReplayEvents([{state:{board:[{id:'bad',l:'<',x:0,y:0}],rack:[]}}]).length,0);
+ assert.equal((await buildReplay([])).frames.length,0);
+});

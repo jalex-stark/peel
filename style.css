@@ -35,3 +35,5 @@
 #inspection-caption{color:#247f9e;font-size:12px} .board-status:has(#inspection-caption:not([hidden])) .selection-info{display:none}
 
 .inspection-shape.caves-outline path{fill:none}.inspection-shape .cave-area{fill:#d88d3955;stroke:none}
+
+.modal.replay-modal{width:calc(100vw - 40px);max-width:1500px;height:calc(100vh - 40px);padding:44px 12px 12px;display:flex;flex-direction:column;overflow:hidden}.replay-frame{width:100%;flex:1;min-height:0;border:0}.replay-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12px;padding:6px}.replay-actions button{padding:6px 10px}.replay-actions input{max-width:210px}
