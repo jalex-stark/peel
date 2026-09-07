@@ -50,3 +50,20 @@ test('Pond anchors and delivery rack are real submission constraints',()=>{
  [s.board[i].l,s.board[j].l]=[s.board[j].l,s.board[i].l];assert.equal(assessPrototype(pond,s).checks.find(c=>c.label.includes('marked courtyard')).ok,false);
  const delivery=prototypes[0],state=structuredClone(delivery.report.witness),tile=state.board.pop();state.rack=[{id:tile.id,l:tile.l}];assert.equal(assessPrototype(delivery,state).checks[0].ok,false);
 });
+
+test('Opting out of the challenge allowlist uses the supplied dictionary without dropping other constraints',()=>{
+ const p=structuredClone(prototypes[1]),state=p.report.witness;
+ const normal=new Set(p.words),word=getWords(state.board)[0].word;p.words=p.words.filter(w=>w!==word);
+ assert.equal(assessPrototype(p,state).ok,false);
+ assert.equal(assessPrototype(p,state,{dictionary:normal,useAllowlist:false}).ok,true);
+ assert.equal(assessPrototype({...p,budget:0},state,{dictionary:normal,useAllowlist:false}).ok,false);
+ assert.equal(assessPrototype(p,state,{dictionary:new Set(),useAllowlist:false}).ok,false);
+});
+
+test('Connectivity and allowed words report independent acceptance conditions',()=>{
+ const p=prototypes[1],disconnected={board:[...'CAT'].map((l,x)=>({id:'a'+x,l,x,y:0})).concat([...'DOG'].map((l,x)=>({id:'b'+x,l,x,y:4}))),rack:[],bag:[]};
+ const dictionary=new Set(['CAT','DOG']);let a=assessPrototype(p,disconnected,{dictionary,useAllowlist:false});
+ assert.equal(a.checks.find(c=>c.label==='One connected board').ok,false);assert.equal(a.checks.find(c=>c.label.startsWith('Every run')).ok,true);
+ a=assessPrototype(p,{...disconnected,board:[...'ZZZ'].map((l,x)=>({id:'z'+x,l,x,y:0}))},{dictionary,useAllowlist:false});
+ assert.equal(a.checks.find(c=>c.label==='One connected board').ok,true);assert.equal(a.checks.find(c=>c.label.startsWith('Every run')).ok,false);
+});

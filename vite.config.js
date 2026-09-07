@@ -1,3 +1,4 @@
+import {normalizeTierPolicy} from './word-tiers.js';
 import {appendHistory} from './history-archive.js';
 import {defineConfig} from 'vite';
 import fs from 'node:fs/promises';
@@ -38,6 +39,8 @@ export default defineConfig({plugins:[{
     if(typeof data.clientId!=='string'||!/^[-a-zA-Z0-9]{1,64}$/.test(data.clientId))return reject(400,'Invalid client ID.');
     const state=parseBoardState(data.state),cleanWords=words=>Array.isArray(words)?words.filter(w=>typeof w==='string'&&/^[A-Z]{2,24}$/.test(w)).slice(0,5000):[];
     const snapshot={receivedAt:new Date().toISOString(),clientId:data.clientId,state,dictionaryOverrides:{added:cleanWords(data.dictionaryOverrides?.added),removed:cleanWords(data.dictionaryOverrides?.removed)},modifierIds:Array.isArray(data.modifierIds)?data.modifierIds.filter(id=>typeof id==='string'&&/^[a-z_]{1,40}$/.test(id)).slice(0,50):[]};
+    snapshot.wordTierPolicy=normalizeTierPolicy(data.wordTierPolicy);
+    snapshot.workOrder=data.workOrder&&typeof data.workOrder.id==='string'&&/^[a-z0-9-]{1,64}$/.test(data.workOrder.id)?{id:data.workOrder.id,useAllowlist:data.workOrder.useAllowlist!==false}:null;
     snapshot.replayEvents=(Array.isArray(data.replayEvents)?data.replayEvents:[]).slice(-500).flatMap(event=>{
      try{const candidate=event.state,clean=parseBoardState({board:candidate.board,rack:candidate.rack,bag:[],total:candidate.board.length+candidate.rack.length});return [{sequence:Number(event.sequence)||0,at:String(event.at).slice(0,40),action:String(event.action).slice(0,80),state:{board:clean.board,rack:clean.rack,bunch:Math.max(0,Math.min(500,Number(candidate.bunch)||0))}}];}catch{return [];}
     });

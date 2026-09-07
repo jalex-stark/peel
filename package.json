@@ -7,7 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "node scripts/build-challenges.mjs && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "test": "node --test game.test.js challenges.test.js",
+    "test": "node --test game.test.js challenges.test.js word-tiers.test.js",
     "test:browser": "node browser-check.js",
     "dictionary": "node prepare-dictionary.js",
     "challenges": "node scripts/build-challenges.mjs",

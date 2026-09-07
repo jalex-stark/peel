@@ -10,6 +10,80 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));
 mkdirSync('artifacts',{recursive:true});
 const boardState=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('peel-game')));
 async function clickCell(x,y){const p=await page.evaluate(({x,y})=>{const r=document.querySelector('#board').getBoundingClientRect(),m=new DOMMatrix(getComputedStyle(document.querySelector('#plane')).transform);return {x:r.left+m.e+(x*48+22)*m.a,y:r.top+m.f+(y*48+22)*m.d};},{x,y});await page.mouse.click(p.x,p.y);}
+if(process.argv[2]==='--catalog-progress'){
+ try{
+  await page.goto('http://localhost:5173/challenges/');
+  assert.equal(await page.locator('.progress-empty').count(),12);
+  await page.evaluate(()=>{
+   const cards=[...document.querySelectorAll('.prototype')];
+   localStorage.setItem(cards[0].dataset.progressKey,JSON.stringify([{value:42,passed:false},{value:61,passed:true},{value:70,passed:true,wordRules:'personal'},{value:50,passed:false}]));
+   localStorage.setItem(cards[1].dataset.progressKey,JSON.stringify([{value:40,passed:false}]));
+   localStorage.setItem(cards[2].dataset.progressKey,'broken json');
+   localStorage.setItem(document.querySelector('.warmup').dataset.progressKey,JSON.stringify({best:{value:18}}));
+   window.dispatchEvent(new Event('storage'));
+  });
+  assert.equal(await page.locator('.completed').count(),2);
+  assert.match(await page.locator('.prototype').nth(0).innerText(),/Best Hull fill: 61% · Challenge allowlist/);
+  assert.match(await page.locator('.prototype').nth(0).innerText(),/70% · Your word list/);
+  assert.match(await page.locator('.prototype').nth(1).innerText(),/Target not yet met/);
+  assert.match(await page.locator('.prototype').nth(2).innerText(),/No submissions yet/);
+  await page.reload();assert.equal(await page.locator('.completed').count(),2);
+  await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.screenshot({path:'artifacts/screenshot-catalog-progress.png',fullPage:true});
+  assert.deepEqual(errors,[]);console.log('Passed: catalog completion, maximum scores by word rules, below-target submissions, legacy warm-ups, persistence, malformed storage and mobile layout.');
+ }finally{await browser.close();}process.exit(0);
+}
+if(process.argv[2]==='--word-rules'){
+ try{
+  const key='peel-work-order-compact-without-sacrifice-v1';await page.goto('http://localhost:5173/?work-order=compact-without-sacrifice');await page.waitForSelector('#work-order-allowlist');
+  await page.evaluate(key=>localStorage.setItem(key,JSON.stringify({board:[...'AT'].map((l,x)=>({id:'rule'+x,l,x,y:0})),rack:[],bag:[],total:2})),key);await page.reload();await page.waitForSelector('#work-order-allowlist');
+  assert.equal(await page.locator('#plane .bad').count(),2);assert.equal(await page.locator('.work-order-panel li').filter({hasText:'One connected board'}).getAttribute('class'),'met');assert.equal(await page.locator('.work-order-panel li').filter({hasText:'Every run'}).getAttribute('class'),'unmet');
+  await page.locator('#work-order-allowlist').uncheck();assert.equal(await page.locator('#plane .bad').count(),0);assert.equal(await page.locator('.work-order-panel li').filter({hasText:'Every run'}).getAttribute('class'),'met');assert.equal(await page.locator('#dictionary-open').isDisabled(),false);
+  await page.locator('#work-order-submit').click();assert.match(await page.locator('#work-order-notice').innerText(),/Still needed: Exact letter bank/);
+  await page.reload();await page.waitForSelector('#work-order-allowlist');assert.equal(await page.locator('#work-order-allowlist').isChecked(),false);assert.equal(await page.locator('#plane .bad').count(),0);
+  await page.locator('#work-order-allowlist').check();assert.equal(await page.locator('#plane .bad').count(),2);assert.equal(await page.locator('#dictionary-open').isDisabled(),true);
+  assert.deepEqual(errors,[]);console.log('Passed: allowlist opt-out, separate connectivity/word checks, persisted choice and remaining bank constraints.');
+ }finally{await browser.close();}process.exit(0);
+}
+if(process.argv[2]==='--quality'){
+ try{
+  await page.goto('http://localhost:5173/');await page.waitForFunction(()=>!document.querySelector('#dictionary-open').disabled);
+  await page.evaluate(()=>{localStorage.setItem('peel-game',JSON.stringify({board:[...'COIF'].map((l,x)=>({id:'q'+x,l,x,y:0})).concat({id:'q4',l:'Q',x:2,y:-1}),rack:[],bag:[],total:5}));localStorage.setItem('peel-quality-highlight','false');});
+  await page.reload();await page.waitForFunction(()=>!document.querySelector('#dictionary-open').disabled);await page.locator('#score-open').click();
+  await page.locator('[data-score-inspect="quality"]').hover();assert.equal(await page.locator('#inspect-quality>b').innerText(),'64');assert.equal(await page.locator('.quality-colored').count(),5);
+  assert.equal(await page.locator('[data-id="q2"]').getAttribute('data-quality-tier'),'C');assert.equal(await page.locator('[data-id="q0"]').getAttribute('data-quality-tier'),'A');
+  await page.locator('#quality-pin').click();await page.locator('#board').hover();assert.equal(await page.locator('.quality-colored').count(),5);
+  await page.locator('[data-id="q4"]').click();await page.keyboard.press('ArrowUp');await page.keyboard.press('Enter');assert.equal(await page.locator('[data-id="q4"]').getAttribute('data-quality-tier'),'none');assert.equal(await page.locator('[data-id="q2"]').getAttribute('data-quality-tier'),'A');await page.keyboard.press('z');
+  await page.locator('#score-close').click();assert.equal(await page.locator('.quality-colored').count(),5);
+  await page.locator('#dictionary-open').click();await page.locator('#tier-query').fill('qi');await page.locator('[data-word-tier="QI"]').selectOption('B');await page.locator('#modal-root .modal-close').click();assert.equal(await page.locator('[data-id="q2"]').getAttribute('data-quality-tier'),'B');
+  await page.locator('#score-open').click();assert.equal(await page.locator('#inspect-quality>b').innerText(),'72');await page.screenshot({path:'artifacts/screenshot-word-quality.png',fullPage:true});
+  await page.locator('#score-close').click();await page.locator('#replay-open').click();const frame=page.frameLocator('.replay-frame');await frame.locator('#metric').selectOption('quality');await frame.locator('#scrub').fill(await frame.locator('#scrub').getAttribute('max'));assert.equal(await frame.locator('#value').innerText(),'72');assert.equal(await frame.locator('.quality-cell').count(),5);assert.equal(await frame.locator('.quality-cell[data-tier=B]').count(),2);await page.locator('#modal-root .modal-close').click();
+  await page.locator('#board-share').click();const download=page.waitForEvent('download');await page.locator('#position-artifact').click();await (await download).saveAs('artifacts/quality-board.html');await page.goto(new URL('./artifacts/quality-board.html',import.meta.url).href);await page.locator('[data-inspect=quality]').hover();assert.equal(await page.locator('[data-overlay=quality].active .quality-cell').count(),5);assert.equal(await page.locator('[data-overlay=quality] [data-tier=B]').count(),2);
+  assert.deepEqual(errors,[]);console.log('Passed: weakest-crossing tile colors, live updates, persistent pin, personal regrading, quality replay and standalone export.');
+ }finally{await browser.close();}process.exit(0);
+}
+if(process.argv[2]==='--tiers'){
+ try{
+  const setWord=async word=>{await page.evaluate(word=>localStorage.setItem('peel-game',JSON.stringify({board:[...word].map((l,x)=>({id:'tier'+x,l,x,y:0})),rack:[],bag:[],total:word.length})),word);await page.reload();await page.waitForFunction(()=>!document.querySelector('#dictionary-open').disabled);};
+  await page.goto('http://localhost:5173/');await page.waitForFunction(()=>!document.querySelector('#dictionary-open').disabled);
+  await setWord('PUL');assert.equal(await page.locator('#plane .bad').count(),0);
+  await page.locator('#dictionary-open').click();assert.equal(await page.locator('[data-word-tier="PUL"]').count(),1);
+  await page.locator('[data-tier-minimum="D"]').click();await page.locator('.modal-close').click();assert.equal(await page.locator('#plane .bad').count(),3);assert.match(await page.locator('#status').innerText(),/Tier cutoff blocks PUL/);
+  await setWord('AVO');assert.equal(await page.locator('#plane .bad').count(),0);
+  await page.locator('#dictionary-open').click();await page.locator('[data-tier-minimum="C"]').click();await page.locator('.modal-close').click();assert.equal(await page.locator('#plane .bad').count(),3);
+  await page.locator('#peel').click();assert.equal(await page.locator('#win-new').count(),0);
+  await page.locator('#dictionary-open').click();await page.locator('#tier-query').fill('avo');await page.locator('[data-word-tier="AVO"]').selectOption('B');assert.match(await page.locator('#tier-results').innerText(),/Your rating/);
+  await page.locator('.modal-close').click();assert.equal(await page.locator('#plane .bad').count(),0);
+  await page.reload();await page.waitForFunction(()=>!document.querySelector('#dictionary-open').disabled);assert.equal(await page.locator('#plane .bad').count(),0);
+  await setWord('QI');assert.equal(await page.locator('#plane .bad').count(),0);
+  await page.locator('#dictionary-open').click();await page.locator('#tier-query').fill('veracity');assert.equal(await page.locator('.tier-word .tier-letter').first().innerText(),'S');
+  await page.locator('#tier-query').fill('');await page.locator('#tier-filter').selectOption('F');assert.ok((await page.locator('.tier-word').count())>0);assert.ok((await page.locator('.tier-word .tier-letter').allTextContents()).every(t=>t==='F'));
+  await page.locator('#tier-filter').selectOption('A');assert.equal(await page.locator('.tier-word').count(),40);await page.locator('#tier-more').click();assert.equal(await page.locator('.tier-word').count(),80);await page.locator('#tier-filter').selectOption('');await page.screenshot({path:'artifacts/screenshot-word-tiers.png',fullPage:true});
+  await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  const policy=await page.evaluate(()=>JSON.parse(localStorage.getItem('peel-word-tier-policy-v1')));assert.equal(policy.minimum,'C');assert.equal(policy.overrides.AVO,'B');
+  assert.deepEqual(errors,[]);console.log('Passed: tier presets, live validation, blocked peel, personal ratings, persistence, QI acceptance, browsing, search and mobile layout.');
+ }finally{await browser.close();}process.exit(0);
+}
 if(process.argv[2]==='--prototypes'){
  try{
   const prototypes=JSON.parse(readFileSync('challenges/prototypes.json','utf8'));
@@ -317,7 +391,7 @@ try{
  assert.match(await page.locator('#peel').innerText(),/Bank 2/);
  await page.locator('#score-open').click();await page.locator('#run-abandon').click();assert.match(await page.locator('.score-run').innerText(),/Start a five-stage run/);await page.locator('.modal-close').click();
  // Dictionary overrides add missing common words and hide obscure bundled words.
- await page.locator('#dictionary-open').click();await page.locator('#dictionary-word').fill('sex');
+ await page.locator('#dictionary-open').click();await page.locator('#dictionary-advanced>summary').click();await page.locator('#dictionary-word').fill('sex');
  assert.match(await page.locator('#dictionary-state').innerText(),/not included/);await page.locator('#dictionary-action').click();
  assert.match(await page.locator('#dictionary-state').innerText(),/your addition/);
  await page.locator('#dictionary-word').fill('kae');assert.match(await page.locator('#dictionary-state').innerText(),/bundled word/);await page.locator('#dictionary-action').click();
@@ -327,9 +401,9 @@ try{
  await page.evaluate(()=>localStorage.setItem('peel-game',JSON.stringify({board:[...`SEX`].map((l,x)=>({id:`u${x}`,l,x,y:0})),rack:[],bag:[],total:3})));
  await page.reload();await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('All words connect'));
  assert.equal(await page.locator('#plane .bad').count(),0,'custom word participates in Auto-check');
- await page.locator('#dictionary-open').click();await page.locator('#dictionary-word').fill('sex');await page.locator('#dictionary-action').click();await page.locator('.modal-close').click();
+ await page.locator('#dictionary-open').click();await page.locator('#dictionary-advanced>summary').click();await page.locator('#dictionary-word').fill('sex');await page.locator('#dictionary-action').click();await page.locator('.modal-close').click();
  await page.waitForFunction(()=>document.querySelectorAll('#plane .bad').length===3);
- await page.locator('#dictionary-open').click();await page.locator('#dictionary-word').fill('sex');await page.locator('#dictionary-action').click();await page.locator('.modal-close').click();
+ await page.locator('#dictionary-open').click();await page.locator('#dictionary-advanced>summary').click();await page.locator('#dictionary-word').fill('sex');await page.locator('#dictionary-action').click();await page.locator('.modal-close').click();
  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('All words connect'));
  // A complete guided round, including every draw and placement.
  await page.locator('#demo-reset').click();
