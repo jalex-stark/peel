@@ -10,6 +10,20 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));
 mkdirSync('artifacts',{recursive:true});
 const boardState=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('peel-game')));
 async function clickCell(x,y){const p=await page.evaluate(({x,y})=>{const r=document.querySelector('#board').getBoundingClientRect(),m=new DOMMatrix(getComputedStyle(document.querySelector('#plane')).transform);return {x:r.left+m.e+(x*48+22)*m.a,y:r.top+m.f+(y*48+22)*m.d};},{x,y});await page.mouse.click(p.x,p.y);}
+if(process.argv[2]==='--challenge-routing'){
+ try{
+  await page.goto('http://localhost:5173/');await page.waitForSelector('.challenge-link');
+  const saved=await page.evaluate(()=>localStorage.getItem('peel-game'));
+  await page.locator('.challenge-link').click();assert.equal(await page.locator('.level-card').count(),16);
+  await page.locator('.level-card').first().click();assert.equal(await page.locator('#grid .tile').count(),5);
+  assert.equal(await page.evaluate(()=>localStorage.getItem('peel-game')),saved);
+  for(const suffix of ['/challenges/','/challenges?test=1','/challenges/index.html']){
+   await page.goto('http://localhost:5173'+suffix);assert.equal(await page.locator('.level-card').count(),16);
+   assert.equal(await page.locator('#board').count(),0);
+  }
+  assert.deepEqual(errors,[]);console.log('Passed: local catalog routing, main-game link, playable level links and preserved main board.');
+ }finally{await browser.close();}process.exit(0);
+}
 if(process.argv[2]==='--challenges'){
  try{
   const pack=JSON.parse(readFileSync('public/challenges/analysis.json','utf8'));

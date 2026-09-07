@@ -7,6 +7,15 @@ import {parseBoardState} from './board-state.js';
 export default defineConfig({plugins:[{
  name:'peel-local-board-sharing',
  configureServer(server){
+  // Vite serves public files by exact path, but directory URLs otherwise fall
+  // through to the main SPA. Resolve the catalog before that fallback.
+  server.middlewares.use((req,res,next)=>{
+   if(req.method!=='GET'&&req.method!=='HEAD')return next();
+   const url=new URL(req.url,'http://localhost'),catalog=`${server.config.base}challenges`;
+   if(url.pathname===catalog){res.statusCode=302;res.setHeader('Location',`${catalog}/${url.search}`);return res.end();}
+   if(url.pathname===`${catalog}/`)req.url=`${catalog}/index.html${url.search}`;
+   next();
+  });
   server.middlewares.use('/__peel/history',async(req,res)=>{
    res.setHeader('Content-Type','application/json');res.setHeader('Cache-Control','no-store');
    const reject=(code,message)=>{res.statusCode=code;res.end(JSON.stringify({error:message}));};
