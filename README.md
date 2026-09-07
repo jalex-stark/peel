@@ -2,11 +2,13 @@
 
 A playable, relaxed Bananagrams-inspired solo game. Built with vanilla JavaScript and Vite.
 
-## Challenge pack
+## Work orders
 
-Open **Work orders** in the game or [the hosted Junction Pack](https://jalex-stark.github.io/peel/challenges/): 16 standalone offline puzzles with fixed footprints, finite visible word allowlists, repair budgets, and proven optimization targets. Each has saved progress, swaps, undo/redo, hints, portable attempts, and a spoiler-gated exhaustive solution report. The main game board is preserved. See [design and solution-space analysis](challenges/DESIGN.md).
+Open **Work orders** or [the hosted catalog](https://jalex-stark.github.io/peel/challenges/). Three larger prototypes use the full board editor: fit a Q/U/Z delivery into a 21-tile board; compact a 33-tile board while preserving long words; improve enclosure around an anchored pond. They have live constraints, separate saved progress, inspectable objectives, and restorable submissions for comparing score against changed positions. Targets have verified examples, not proven global optima.
 
-`npm run challenges` regenerates the individual HTML artifacts and complete `public/challenges/analysis.json`. `node browser-check.js --challenges` solves all sixteen through browser controls. `npm test` independently brute-forces every board of at most nine tiles and compares against the constraint solver.
+Nine smaller fixed-footprint puzzles remain as optional offline warm-ups. Shared load is the only remaining two-word level. See [design and search findings](challenges/DESIGN.md).
+
+`npm run challenges` regenerates the catalog and warm-up artifacts. `npm run prototypes` reruns the larger-board construction search and rebuilds its definitions. `node browser-check.js --prototypes` checks the full-editor prototypes; `--challenges` checks the remaining standalone warm-ups. `npm test` verifies witnesses and constraints, and independently enumerates every warm-up board with at most nine tiles.
 
 ## Run
 

@@ -5,11 +5,6 @@ TAXES EXTRA STONE NOTES TONES ONSET STORE RATES TEARS STARE TARES STEER TREES RE
 function square(rows,ring=false){const cells=[],letters=[];rows.forEach((r,y)=>[...r].forEach((l,x)=>{if(!ring||x===0||y===0||x===r.length-1||y===rows.length-1){cells.push([x,y]);letters.push(l);}}));return {cells,seed:letters.join('')};}
 function cross(a,b,ai,bi){const map=new Map();[...a].forEach((l,x)=>map.set(`${x},${bi}`,l));[...b].forEach((l,y)=>{const k=`${ai},${y}`;if(map.has(k)&&map.get(k)!==l)throw Error('Bad crossing');map.set(k,l);});const entries=[...map].map(([k,l])=>({xy:k.split(',').map(Number),l})).sort((a,b)=>a.xy[1]-b.xy[1]||a.xy[0]-b.xy[0]);return {cells:entries.map(e=>e.xy),seed:entries.map(e=>e.l).join('')};}
 export const SPECS=[
- {id:'01-crossed-wires',title:'Crossed wires',...cross('CAT','RAT',1,1),mode:'repair',metric:'variety',scramble:1,description:'Two ordinary animals, one shared vowel. Repair the crossing by changing at most two sockets.'},
- {id:'02-dog-leg',title:'Dog leg',...cross('DOG','LOG',1,1),mode:'repair',metric:'variety',scramble:2,description:'A tiny routing repair. The centre is anchored; exchange the ends until both lines read correctly.',lockCenter:true},
- {id:'03-q-branch',title:'Q branch',...cross('QUIZ','QUIT',2,2),mode:'repair',metric:'power',scramble:2,description:'Seven tiles, two Qs, no spare vowels. Place the high-value cargo into two familiar words.'},
- {id:'04-tax-exchange',title:'Tax exchange',...cross('TAXES','EXTRA',2,1),mode:'optimize',metric:'squares',description:'The X is expensive. Maximize the sum of squared word values; shared letters count in both words.'},
- {id:'05-earth-exchange',title:'Earth exchange',...cross('SPARE','EARTH',2,1),mode:'optimize',metric:'squares',description:'Split the same cargo into stronger words. There are several legal routings, but equal word values are not optimal.'},
  {id:'06-nine-sockets',title:'Nine sockets',...square(['CAT','ARE','TEN']),mode:'repair',metric:'variety',scramble:2,description:'Every tile belongs to two words. Restore a fully woven 3×3 square within four changed sockets.'},
  {id:'07-ore-processing',title:'Ore processing',...square(['DOG','ORE','GET']),mode:'repair',metric:'squares',scramble:2,description:'A compact processing block. Fix all six runs with four changed sockets; the vocabulary is intentionally small.'},
  {id:'08-sea-of-letters',title:'Sea of letters',...square(['SEA','EAR','ART']),mode:'repair',metric:'variety',scramble:2,description:'Nine common letters with no anchor. Repair the six runs within four changed sockets.'},
@@ -17,8 +12,8 @@ export const SPECS=[
  {id:'10-courtyard',title:'Courtyard',...square(['CAT','ARE','TEN'],true),mode:'repair',metric:'variety',scramble:2,description:'Keep the central gap empty. Repair the four boundary words; the one-cell enclosure is intentional.'},
  {id:'11-four-square-pond',title:'Four-square pond',...square(['BALL','AREA','LEAD','LADY'],true),mode:'repair',metric:'squares',scramble:3,description:'A four-cell pond with twelve boundary tiles. Restore the four walls within six changed sockets, without filling the water.'},
  {id:'12-solid-state',title:'Solid state',...square(['BALL','AREA','LEAD','LADY']),mode:'repair',metric:'variety',scramble:3,description:'Sixteen tiles, eight words, no gaps. Repair this dense block within six changed sockets.'},
- {id:'13-heavy-freight',title:'Heavy freight',...cross('CAR','PAT',1,1),mode:'optimize',metric:'power',description:'Five tiles, twelve arrangements. Concentrate the valuable letters into one word; only the strongest word scores.'},
  {id:'14-shared-load',title:'Shared load',...cross('FAST','ELSE',2,2),mode:'optimize',metric:'squares',description:'A crossing letter is counted twice. Move the valuable cargo to the junction and maximize squared word values.'},
- {id:'15-budget-freight',title:'Budget freight',...cross('STAKE','PARSE',2,1),mode:'optimize',metric:'squares',tight:true,description:'Improve the word-value total under a tight final-change budget. Temporary detours cost nothing; the finished footprint determines cost.'},
  {id:'16-four-voices',title:'Four voices',...square(['CAT','ARE','TEN'],true),mode:'optimize',metric:'variety',description:'Four walls, four voices. Maximize distinct words around the courtyard; repeated words count only once.'},
 ];
+
+export const RETIRED_IDS=["01-crossed-wires","02-dog-leg","03-q-branch","04-tax-exchange","05-earth-exchange","13-heavy-freight","15-budget-freight"];

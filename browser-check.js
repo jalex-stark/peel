@@ -10,15 +10,44 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));
 mkdirSync('artifacts',{recursive:true});
 const boardState=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('peel-game')));
 async function clickCell(x,y){const p=await page.evaluate(({x,y})=>{const r=document.querySelector('#board').getBoundingClientRect(),m=new DOMMatrix(getComputedStyle(document.querySelector('#plane')).transform);return {x:r.left+m.e+(x*48+22)*m.a,y:r.top+m.f+(y*48+22)*m.d};},{x,y});await page.mouse.click(p.x,p.y);}
+if(process.argv[2]==='--prototypes'){
+ try{
+  const prototypes=JSON.parse(readFileSync('challenges/prototypes.json','utf8'));
+  await page.goto('http://localhost:5173/');await page.waitForSelector('.challenge-link');
+  const original=await page.evaluate(()=>localStorage.getItem('peel-game'));
+  for(const p of prototypes){
+   await page.goto('http://localhost:5173/?work-order='+p.id);await page.waitForSelector('#work-order-submit');
+   assert.equal(await page.locator('#plane>.tile').count(),p.state.board.length);assert.equal(await page.locator('#rack>.tile').count(),p.state.rack.length);
+   await page.locator('#work-order-submit').click();assert.match(await page.locator('#work-order-notice').innerText(),/Still needed/);
+   if(p.state.rack.length){await page.keyboard.press('Space');await clickCell(5,2);assert.equal(await page.locator('#plane>.tile').count(),p.state.board.length+1);await page.keyboard.press('z');}
+   await page.locator('#plane>.tile').first().dblclick();assert.ok(await page.locator('#plane>.tile.selected').count()>1);
+   for(let i=0;i<10;i++)await page.keyboard.press('ArrowRight');await page.keyboard.press('Enter');const stateKey='peel-work-order-'+p.id+'-v'+p.version;
+   assert.notDeepEqual(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).board,stateKey),p.state.board);
+   await page.keyboard.press('z');assert.deepEqual(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).board,stateKey),p.state.board);
+   await page.getByText('Search findings (spoilers)',{exact:true}).click();await page.locator('#work-order-witness').click();await page.locator('#work-order-submit').click();assert.match(await page.locator('#work-order-notice').innerText(),/Accepted/);
+   assert.equal(await page.evaluate(()=>localStorage.getItem('peel-game')),original);
+   await page.reload();await page.waitForSelector('#work-order-submit');await page.locator('#work-order-submit').click();assert.match(await page.locator('#work-order-notice').innerText(),/Accepted/);
+   assert.equal(await page.locator('#dictionary-open').isDisabled(),true);
+   await page.locator('#work-order-reset').click();assert.equal(await page.locator('#plane>.tile').count(),p.state.board.length);
+   await page.locator('.work-order-panel summary').filter({hasText:'Saved submissions'}).click();await page.locator('[data-work-order-entry]').last().click();await page.locator('#work-order-submit').click();assert.match(await page.locator('#work-order-notice').innerText(),/Accepted/);await page.locator('#work-order-reset').click();
+   if(p.id==='compact-without-sacrifice')await page.screenshot({path:'artifacts/screenshot-prototype.png',fullPage:true});
+  }
+  await page.goto('http://localhost:5173/');assert.equal(await page.evaluate(()=>localStorage.getItem('peel-game')),original);
+  await page.goto('http://localhost:5173/challenges/');assert.equal(await page.locator('.prototype').count(),3);assert.equal(await page.locator('.warmup').count(),9);
+  await page.locator('.prototype').first().click();await page.waitForSelector('#work-order-submit');
+  await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  assert.deepEqual(errors,[]);console.log('Passed: three larger prototypes, live acceptance constraints, delivery placement, group moves, undo, verified examples, submissions, progress isolation, catalog routes and mobile layout.');
+ }finally{await browser.close();}process.exit(0);
+}
 if(process.argv[2]==='--challenge-routing'){
  try{
   await page.goto('http://localhost:5173/');await page.waitForSelector('.challenge-link');
   const saved=await page.evaluate(()=>localStorage.getItem('peel-game'));
-  await page.locator('.challenge-link').click();assert.equal(await page.locator('.level-card').count(),16);
-  await page.locator('.level-card').first().click();assert.equal(await page.locator('#grid .tile').count(),5);
+  await page.locator('.challenge-link').click();assert.equal(await page.locator('.level-card').count(),12);
+  await page.locator('.level-card.warmup').first().click();assert.equal(await page.locator('#grid .tile').count(),9);
   assert.equal(await page.evaluate(()=>localStorage.getItem('peel-game')),saved);
   for(const suffix of ['/challenges/','/challenges?test=1','/challenges/index.html']){
-   await page.goto('http://localhost:5173'+suffix);assert.equal(await page.locator('.level-card').count(),16);
+   await page.goto('http://localhost:5173'+suffix);assert.equal(await page.locator('.level-card').count(),12);
    assert.equal(await page.locator('#board').count(),0);
   }
   assert.deepEqual(errors,[]);console.log('Passed: local catalog routing, main-game link, playable level links and preserved main board.');
@@ -45,7 +74,7 @@ if(process.argv[2]==='--challenges'){
    await page.locator('#analysis summary').click();await page.waitForFunction(()=>document.querySelector('#report').textContent.includes('Exhaustive search'));assert.match(await page.locator('#report').innerText(),/Exhaustive search/);
   }
   function checkValue(l){return pack.levels.find(p=>p.level.id===l.id).report.solutions.find(r=>r.letters===l.witness)[l.metric];}
-  const l=pack.levels[13].level;await page.goto(new URL('./public/challenges/'+l.id+'.html',import.meta.url).href);await page.locator('#reset').click();
+  const l=pack.levels.find(p=>p.level.id==='14-shared-load').level;await page.goto(new URL('./public/challenges/'+l.id+'.html',import.meta.url).href);await page.locator('#reset').click();
   const initial=(await page.locator('.tile > span').allTextContents()).join('');
   await page.locator('.tile').nth(0).click();await page.locator('.tile').nth(0).click();assert.equal(await page.locator('.tile.selected').count(),0);
   const a=await page.locator('.tile').nth(0).boundingBox(),b=await page.locator('.tile').nth(1).boundingBox();
@@ -56,10 +85,10 @@ if(process.argv[2]==='--challenges'){
   await page.goto(new URL('./artifacts/challenge-offline.html',import.meta.url).href);assert.equal(await page.locator('.tile').count(),7);
   const code='PEELWORKS1.'+Buffer.from(JSON.stringify({level:l.id,version:l.version,letters:l.witness})).toString('base64');page.once('dialog',d=>d.accept(code));await page.locator('#import').click();await page.locator('#submit').click();assert.match(await page.locator('#notice').innerText(),/^Accepted/);
   await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-  await page.goto(new URL('./public/challenges/index.html',import.meta.url).href);assert.equal(await page.locator('.level-card').count(),16);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.goto(new URL('./public/challenges/index.html',import.meta.url).href);assert.equal(await page.locator('.level-card').count(),12);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:'artifacts/screenshot-challenge-pack.png',fullPage:true});
   assert.ok(!requests.some(u=>u.startsWith('http')),'Standalone artifacts must not require network');assert.deepEqual(errors,[]);
-  console.log('Passed: all 16 offline challenges solved through real input, targets, persistence, drag, deselect, undo/redo, hints, reports, export/import and mobile layout.');
+  console.log('Passed: all remaining offline warm-ups solved through real input, targets, persistence, drag, deselect, undo/redo, hints, reports, export/import and mobile layout.');
  }finally{await browser.close();}process.exit(0);
 }
 if(process.argv[2]==='--replay'){
@@ -363,7 +392,7 @@ try{
  await page.locator('[data-score-inspect="solid"]').focus();assert.equal(await page.locator('.solid-rectangle').count(),1);
  await page.locator('[data-score-inspect="longest"]').hover();assert.ok(await page.locator('.score-inspected').count()>0);
  await page.locator('[data-score-inspect="strongest"]').hover();assert.ok(await page.locator('.score-inspected').count()>0);
- await page.locator('[data-score-inspect="woven"]').hover();assert.equal(await page.locator('.score-inspected').count(),4);
+ await page.locator('[data-score-inspect="woven"]').hover();assert.equal(await page.locator('.score-inspected').count(),0,'weaves smaller than six are not highlighted');
  await page.locator('#score-close').click();assert.equal(await page.locator('.score-inspected').count(),0);
  await page.reload();await page.waitForSelector('#score-open');assert.equal(await page.locator('.score-panel').count(),0,'closed score preference survives reload');
  if(existsSync('artifacts/optimization/improved.json')){

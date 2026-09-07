@@ -1,0 +1,2026 @@
+[
+  {
+    "id": "q-delivery",
+    "source": "incoming",
+    "title": "Q delivery",
+    "description": "Fit Q, U and Z into a working 21-tile board. Every tile must join the crossword, QUIZ must appear, and at most 14 original letter positions may change.",
+    "budget": 14,
+    "required": [
+      "QUIZ"
+    ],
+    "metric": "hullDensity",
+    "target": 0,
+    "longWords": 0,
+    "version": 1,
+    "bank": "AAAAEEEEINNOOQRSSTTTTTUZ",
+    "words": [
+      "AIR",
+      "ANT",
+      "ARE",
+      "AREA",
+      "ART",
+      "ATE",
+      "EAR",
+      "EARN",
+      "EARS",
+      "EASE",
+      "EAST",
+      "EAT",
+      "EATEN",
+      "EATER",
+      "EATS",
+      "ENTER",
+      "ERA",
+      "INN",
+      "ION",
+      "IRE",
+      "IRON",
+      "ITS",
+      "NEAR",
+      "NEAT",
+      "NEST",
+      "NET",
+      "NINE",
+      "NONE",
+      "NOR",
+      "NOSE",
+      "NOT",
+      "NOTE",
+      "NOTES",
+      "NUN",
+      "NUT",
+      "OAR",
+      "OAT",
+      "ONE",
+      "ONSET",
+      "ONTO",
+      "ORE",
+      "OUR",
+      "OUT",
+      "QUART",
+      "QUEST",
+      "QUIET",
+      "QUIT",
+      "QUITE",
+      "QUIZ",
+      "QUOTE",
+      "RAIN",
+      "RAINS",
+      "RAN",
+      "RAT",
+      "RATE",
+      "RATES",
+      "RENT",
+      "RESET",
+      "REST",
+      "RISE",
+      "ROAST",
+      "ROOT",
+      "ROSE",
+      "ROT",
+      "RUN",
+      "SANE",
+      "SAT",
+      "SEA",
+      "SEAT",
+      "SEE",
+      "SEEN",
+      "SENT",
+      "SET",
+      "SIN",
+      "SIR",
+      "SIT",
+      "SITE",
+      "SIZE",
+      "SNORE",
+      "SNORT",
+      "SOAR",
+      "SON",
+      "SOON",
+      "SORT",
+      "SOUR",
+      "STAIR",
+      "STAR",
+      "STARE",
+      "STARS",
+      "START",
+      "STARTS",
+      "STATE",
+      "STEER",
+      "STONE",
+      "STONES",
+      "STORE",
+      "SUE",
+      "SUIT",
+      "SUN",
+      "SURE",
+      "TAN",
+      "TAR",
+      "TASTE",
+      "TEA",
+      "TEAR",
+      "TEARS",
+      "TEASE",
+      "TEE",
+      "TEEN",
+      "TEN",
+      "TENOR",
+      "TENT",
+      "TEST",
+      "TIE",
+      "TIER",
+      "TIN",
+      "TIRE",
+      "TOE",
+      "TON",
+      "TONE",
+      "TONER",
+      "TONES",
+      "TOO",
+      "TORN",
+      "TOUR",
+      "TRAIN",
+      "TREE",
+      "TREES",
+      "TRIO",
+      "TRUE",
+      "TUNE",
+      "TURN",
+      "UNIT",
+      "USE",
+      "USER",
+      "ZERO",
+      "ZONE",
+      "ZOO"
+    ],
+    "locks": [],
+    "bounds": {
+      "minX": -9,
+      "maxX": 14,
+      "minY": -9,
+      "maxY": 14
+    },
+    "state": {
+      "board": [
+        {
+          "id": "w0",
+          "l": "S",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "w1",
+          "l": "T",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "id": "w2",
+          "l": "O",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "id": "w3",
+          "l": "N",
+          "x": 3,
+          "y": 0
+        },
+        {
+          "id": "w4",
+          "l": "E",
+          "x": 4,
+          "y": 0
+        },
+        {
+          "id": "w5",
+          "l": "T",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "id": "w6",
+          "l": "A",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "id": "w7",
+          "l": "R",
+          "x": 0,
+          "y": 3
+        },
+        {
+          "id": "w8",
+          "l": "A",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "id": "w9",
+          "l": "I",
+          "x": 2,
+          "y": 3
+        },
+        {
+          "id": "w10",
+          "l": "N",
+          "x": 3,
+          "y": 3
+        },
+        {
+          "id": "w11",
+          "l": "O",
+          "x": 3,
+          "y": 4
+        },
+        {
+          "id": "w12",
+          "l": "T",
+          "x": 3,
+          "y": 5
+        },
+        {
+          "id": "w13",
+          "l": "E",
+          "x": 3,
+          "y": 6
+        },
+        {
+          "id": "w14",
+          "l": "A",
+          "x": 4,
+          "y": 6
+        },
+        {
+          "id": "w15",
+          "l": "S",
+          "x": 5,
+          "y": 6
+        },
+        {
+          "id": "w16",
+          "l": "T",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "id": "w17",
+          "l": "E",
+          "x": 6,
+          "y": 7
+        },
+        {
+          "id": "w18",
+          "l": "A",
+          "x": 6,
+          "y": 8
+        },
+        {
+          "id": "w19",
+          "l": "T",
+          "x": 7,
+          "y": 8
+        },
+        {
+          "id": "w20",
+          "l": "E",
+          "x": 8,
+          "y": 8
+        }
+      ],
+      "rack": [
+        {
+          "l": "Q",
+          "id": "delivery0"
+        },
+        {
+          "l": "U",
+          "id": "delivery1"
+        },
+        {
+          "l": "Z",
+          "id": "delivery2"
+        }
+      ],
+      "bag": [],
+      "total": 24
+    },
+    "report": {
+      "scope": "Constructive search over a restricted family of word-crossing layouts, not exhaustive over the playable board. Reported bests are witnesses, not proven global optima.",
+      "stages": [
+        {
+          "words": "RAIN",
+          "generated": 1,
+          "retained": 1
+        },
+        {
+          "words": "STAR",
+          "generated": 1,
+          "retained": 1
+        },
+        {
+          "words": [
+            "STONE",
+            "NOTES",
+            "TONES",
+            "ONSET"
+          ],
+          "generated": 3,
+          "retained": 3
+        },
+        {
+          "words": "NOTE",
+          "generated": 3,
+          "retained": 3
+        },
+        {
+          "words": "EAST",
+          "generated": 4,
+          "retained": 4
+        },
+        {
+          "words": "TEA",
+          "generated": 14,
+          "retained": 14
+        },
+        {
+          "words": "ATE",
+          "generated": 14,
+          "retained": 14
+        }
+      ],
+      "examined": 10,
+      "feasibleInFamily": 1,
+      "frontier": [
+        {
+          "changed": 16,
+          "value": 55
+        },
+        {
+          "changed": 14,
+          "value": 51
+        }
+      ],
+      "bestKnown": 51,
+      "witness": {
+        "board": [
+          {
+            "l": "Q",
+            "x": 7,
+            "y": 10,
+            "id": "delivery0"
+          },
+          {
+            "l": "U",
+            "x": 8,
+            "y": 10,
+            "id": "delivery1"
+          },
+          {
+            "l": "I",
+            "x": 9,
+            "y": 10,
+            "id": "w9"
+          },
+          {
+            "l": "Z",
+            "x": 10,
+            "y": 10,
+            "id": "delivery2"
+          },
+          {
+            "l": "R",
+            "x": 9,
+            "y": 8,
+            "id": "w7"
+          },
+          {
+            "l": "A",
+            "x": 9,
+            "y": 9,
+            "id": "w6"
+          },
+          {
+            "l": "N",
+            "x": 9,
+            "y": 11,
+            "id": "w3"
+          },
+          {
+            "l": "S",
+            "x": 6,
+            "y": 8,
+            "id": "w0"
+          },
+          {
+            "l": "T",
+            "x": 7,
+            "y": 8,
+            "id": "w19"
+          },
+          {
+            "l": "A",
+            "x": 8,
+            "y": 8,
+            "id": "w8"
+          },
+          {
+            "l": "N",
+            "x": 6,
+            "y": 4,
+            "id": "w10"
+          },
+          {
+            "l": "O",
+            "x": 6,
+            "y": 5,
+            "id": "w2"
+          },
+          {
+            "l": "T",
+            "x": 6,
+            "y": 6,
+            "id": "w16"
+          },
+          {
+            "l": "E",
+            "x": 6,
+            "y": 7,
+            "id": "w17"
+          },
+          {
+            "l": "O",
+            "x": 7,
+            "y": 4,
+            "id": "w11"
+          },
+          {
+            "l": "T",
+            "x": 8,
+            "y": 4,
+            "id": "w1"
+          },
+          {
+            "l": "E",
+            "x": 9,
+            "y": 4,
+            "id": "w4"
+          },
+          {
+            "l": "E",
+            "x": 3,
+            "y": 6,
+            "id": "w13"
+          },
+          {
+            "l": "A",
+            "x": 4,
+            "y": 6,
+            "id": "w14"
+          },
+          {
+            "l": "S",
+            "x": 5,
+            "y": 6,
+            "id": "w15"
+          },
+          {
+            "l": "T",
+            "x": 8,
+            "y": 6,
+            "id": "w5"
+          },
+          {
+            "l": "E",
+            "x": 8,
+            "y": 7,
+            "id": "w20"
+          },
+          {
+            "l": "A",
+            "x": 3,
+            "y": 4,
+            "id": "w18"
+          },
+          {
+            "l": "T",
+            "x": 3,
+            "y": 5,
+            "id": "w12"
+          }
+        ],
+        "rack": [],
+        "bag": [],
+        "total": 24
+      },
+      "witnessWords": [
+        "QUIZ",
+        "RAIN",
+        "STAR",
+        "NOTE",
+        "NOTES",
+        "EAST",
+        "TEA",
+        "ATE"
+      ]
+    }
+  },
+  {
+    "id": "compact-without-sacrifice",
+    "source": "density",
+    "title": "Compact without sacrifice",
+    "description": "Raise hull fill from 43% to at least 51%. Keep STONES and four words of six or more letters, while changing at most 14 original letter positions.",
+    "budget": 14,
+    "required": [
+      "STONES"
+    ],
+    "metric": "hullDensity",
+    "target": 51,
+    "longWords": 4,
+    "version": 1,
+    "bank": "AAAAEEEEILNNOOPRRSSSSSSSSSTTTTTTY",
+    "words": [
+      "AIR",
+      "ALERT",
+      "ALTER",
+      "ANT",
+      "ANY",
+      "APE",
+      "APT",
+      "ARE",
+      "AREA",
+      "ART",
+      "ATE",
+      "EAR",
+      "EARN",
+      "EARS",
+      "EASE",
+      "EAST",
+      "EASY",
+      "EAT",
+      "EATEN",
+      "EATER",
+      "EATS",
+      "EEL",
+      "ELSE",
+      "ENTER",
+      "ERA",
+      "EYE",
+      "INN",
+      "ION",
+      "IRE",
+      "IRON",
+      "ITS",
+      "LANE",
+      "LAP",
+      "LAST",
+      "LATE",
+      "LATER",
+      "LAY",
+      "LEAN",
+      "LEARN",
+      "LEAST",
+      "LENS",
+      "LESS",
+      "LET",
+      "LIAR",
+      "LIE",
+      "LIES",
+      "LINE",
+      "LION",
+      "LIP",
+      "LIST",
+      "LIT",
+      "LOAN",
+      "LONE",
+      "LOOP",
+      "LOSE",
+      "LOSS",
+      "LOST",
+      "LOT",
+      "NAP",
+      "NEAR",
+      "NEAT",
+      "NEST",
+      "NET",
+      "NINE",
+      "NONE",
+      "NOR",
+      "NOSE",
+      "NOT",
+      "NOTE",
+      "NOTES",
+      "OAR",
+      "OAT",
+      "OIL",
+      "ONE",
+      "ONLY",
+      "ONSET",
+      "ONTO",
+      "OPEN",
+      "OPT",
+      "ORE",
+      "PAIN",
+      "PAIR",
+      "PAIRS",
+      "PAL",
+      "PALE",
+      "PAN",
+      "PAR",
+      "PARSE",
+      "PART",
+      "PARTS",
+      "PASS",
+      "PAST",
+      "PASTEL",
+      "PAT",
+      "PAY",
+      "PEA",
+      "PEAR",
+      "PEARS",
+      "PEAS",
+      "PEEL",
+      "PEER",
+      "PEN",
+      "PEST",
+      "PET",
+      "PETALS",
+      "PIE",
+      "PILE",
+      "PIN",
+      "PINE",
+      "PIT",
+      "PLAN",
+      "PLATES",
+      "PLAY",
+      "PLEATS",
+      "PLOT",
+      "PLY",
+      "POET",
+      "POLE",
+      "POOL",
+      "POOR",
+      "PORT",
+      "POSE",
+      "POST",
+      "POT",
+      "PRAY",
+      "PRESS",
+      "PREY",
+      "PRO",
+      "PRY",
+      "RAIL",
+      "RAIN",
+      "RAINS",
+      "RAN",
+      "RAP",
+      "RARE",
+      "RAT",
+      "RATE",
+      "RATES",
+      "RAY",
+      "REAL",
+      "REAPS",
+      "REAR",
+      "RENT",
+      "RESET",
+      "REST",
+      "RIP",
+      "RISE",
+      "ROAR",
+      "ROAST",
+      "ROLE",
+      "ROOT",
+      "ROPE",
+      "ROSE",
+      "ROT",
+      "RYE",
+      "SAIL",
+      "SALE",
+      "SALT",
+      "SANE",
+      "SAP",
+      "SAT",
+      "SAY",
+      "SEA",
+      "SEAL",
+      "SEAT",
+      "SEE",
+      "SEEN",
+      "SENT",
+      "SET",
+      "SIN",
+      "SIP",
+      "SIR",
+      "SIT",
+      "SITE",
+      "SLAP",
+      "SLATE",
+      "SLEEP",
+      "SLIP",
+      "SLY",
+      "SNAP",
+      "SNORE",
+      "SNORT",
+      "SOAP",
+      "SOAR",
+      "SOIL",
+      "SOLE",
+      "SON",
+      "SOON",
+      "SORT",
+      "SOY",
+      "SPA",
+      "SPAN",
+      "SPARE",
+      "SPEAR",
+      "SPIN",
+      "SPOT",
+      "SPY",
+      "STAIR",
+      "STALE",
+      "STAPLE",
+      "STAR",
+      "STARE",
+      "STARS",
+      "START",
+      "STARTS",
+      "STATE",
+      "STAY",
+      "STEAL",
+      "STEEP",
+      "STEER",
+      "STEP",
+      "STONE",
+      "STONES",
+      "STOP",
+      "STORE",
+      "STRAP",
+      "TAIL",
+      "TALE",
+      "TALES",
+      "TAN",
+      "TAP",
+      "TAPE",
+      "TAR",
+      "TASTE",
+      "TEA",
+      "TEALS",
+      "TEAR",
+      "TEARS",
+      "TEASE",
+      "TEE",
+      "TEEN",
+      "TEN",
+      "TENOR",
+      "TENT",
+      "TEST",
+      "TIE",
+      "TIER",
+      "TILE",
+      "TIN",
+      "TINY",
+      "TIP",
+      "TIRE",
+      "TOE",
+      "TON",
+      "TONE",
+      "TONER",
+      "TONES",
+      "TOO",
+      "TOOL",
+      "TOP",
+      "TORN",
+      "TOY",
+      "TRAIL",
+      "TRAIN",
+      "TRAP",
+      "TRAPS",
+      "TRAY",
+      "TREE",
+      "TREES",
+      "TRIAL",
+      "TRIO",
+      "TRIP",
+      "TRY",
+      "TYPE",
+      "YARN",
+      "YEAR",
+      "YEASTS",
+      "YES",
+      "YET"
+    ],
+    "locks": [],
+    "bounds": {
+      "minX": -9,
+      "maxX": 14,
+      "minY": -9,
+      "maxY": 14
+    },
+    "state": {
+      "board": [
+        {
+          "id": "w0",
+          "l": "S",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "w1",
+          "l": "T",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "id": "w2",
+          "l": "O",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "id": "w3",
+          "l": "N",
+          "x": 3,
+          "y": 0
+        },
+        {
+          "id": "w4",
+          "l": "E",
+          "x": 4,
+          "y": 0
+        },
+        {
+          "id": "w5",
+          "l": "T",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "id": "w6",
+          "l": "A",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "id": "w7",
+          "l": "R",
+          "x": 0,
+          "y": 3
+        },
+        {
+          "id": "w8",
+          "l": "A",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "id": "w9",
+          "l": "I",
+          "x": 2,
+          "y": 3
+        },
+        {
+          "id": "w10",
+          "l": "N",
+          "x": 3,
+          "y": 3
+        },
+        {
+          "id": "w11",
+          "l": "O",
+          "x": 3,
+          "y": 4
+        },
+        {
+          "id": "w12",
+          "l": "T",
+          "x": 3,
+          "y": 5
+        },
+        {
+          "id": "w13",
+          "l": "E",
+          "x": 3,
+          "y": 6
+        },
+        {
+          "id": "w14",
+          "l": "A",
+          "x": 4,
+          "y": 6
+        },
+        {
+          "id": "w15",
+          "l": "S",
+          "x": 5,
+          "y": 6
+        },
+        {
+          "id": "w16",
+          "l": "T",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "id": "w17",
+          "l": "E",
+          "x": 6,
+          "y": 7
+        },
+        {
+          "id": "w18",
+          "l": "A",
+          "x": 6,
+          "y": 8
+        },
+        {
+          "id": "w19",
+          "l": "T",
+          "x": 7,
+          "y": 8
+        },
+        {
+          "id": "w20",
+          "l": "E",
+          "x": 8,
+          "y": 8
+        },
+        {
+          "id": "w21",
+          "l": "S",
+          "x": 5,
+          "y": 0
+        },
+        {
+          "id": "w22",
+          "l": "T",
+          "x": 0,
+          "y": 4
+        },
+        {
+          "id": "w23",
+          "l": "S",
+          "x": 0,
+          "y": 5
+        },
+        {
+          "id": "w24",
+          "l": "S",
+          "x": 4,
+          "y": 3
+        },
+        {
+          "id": "w25",
+          "l": "S",
+          "x": 3,
+          "y": 7
+        },
+        {
+          "id": "w26",
+          "l": "Y",
+          "x": 2,
+          "y": 6
+        },
+        {
+          "id": "w27",
+          "l": "S",
+          "x": 7,
+          "y": 6
+        },
+        {
+          "id": "w28",
+          "l": "R",
+          "x": 6,
+          "y": 9
+        },
+        {
+          "id": "w29",
+          "l": "S",
+          "x": 6,
+          "y": 10
+        },
+        {
+          "id": "w30",
+          "l": "L",
+          "x": 5,
+          "y": 8
+        },
+        {
+          "id": "w31",
+          "l": "P",
+          "x": 4,
+          "y": 8
+        },
+        {
+          "id": "w32",
+          "l": "S",
+          "x": 9,
+          "y": 8
+        }
+      ],
+      "rack": [],
+      "bag": [],
+      "total": 33
+    },
+    "report": {
+      "scope": "Constructive search over a restricted family of word-crossing layouts, not exhaustive over the playable board. Reported bests are witnesses, not proven global optima.",
+      "stages": [
+        {
+          "words": "STARTS",
+          "generated": 6,
+          "retained": 6
+        },
+        {
+          "words": "RAINS",
+          "generated": 28,
+          "retained": 28
+        },
+        {
+          "words": [
+            "NOTES",
+            "STONE",
+            "TONES",
+            "ONSET"
+          ],
+          "generated": 173,
+          "retained": 173
+        },
+        {
+          "words": "YEASTS",
+          "generated": 849,
+          "retained": 849
+        },
+        {
+          "words": [
+            "TEARS",
+            "STARE",
+            "RATES"
+          ],
+          "generated": 3976,
+          "retained": 3976
+        },
+        {
+          "words": [
+            "PLATES",
+            "STAPLE",
+            "PLEATS",
+            "PASTEL",
+            "PETALS"
+          ],
+          "generated": 570,
+          "retained": 570
+        }
+      ],
+      "examined": 485,
+      "feasibleInFamily": 2,
+      "frontier": [
+        {
+          "changed": 19,
+          "value": 53
+        },
+        {
+          "changed": 14,
+          "value": 51
+        },
+        {
+          "changed": 11,
+          "value": 47
+        },
+        {
+          "changed": 0,
+          "value": 43
+        }
+      ],
+      "bestKnown": 51,
+      "witness": {
+        "board": [
+          {
+            "l": "S",
+            "x": -1,
+            "y": 1,
+            "id": "w21"
+          },
+          {
+            "l": "T",
+            "x": 0,
+            "y": 1,
+            "id": "w5"
+          },
+          {
+            "l": "O",
+            "x": 1,
+            "y": 1,
+            "id": "w2"
+          },
+          {
+            "l": "N",
+            "x": 2,
+            "y": 1,
+            "id": "w3"
+          },
+          {
+            "l": "E",
+            "x": 3,
+            "y": 1,
+            "id": "w4"
+          },
+          {
+            "l": "S",
+            "x": 4,
+            "y": 1,
+            "id": "w29"
+          },
+          {
+            "l": "S",
+            "x": 0,
+            "y": 0,
+            "id": "w0"
+          },
+          {
+            "l": "A",
+            "x": 0,
+            "y": 2,
+            "id": "w6"
+          },
+          {
+            "l": "R",
+            "x": 0,
+            "y": 3,
+            "id": "w7"
+          },
+          {
+            "l": "T",
+            "x": 0,
+            "y": 4,
+            "id": "w22"
+          },
+          {
+            "l": "S",
+            "x": 0,
+            "y": 5,
+            "id": "w23"
+          },
+          {
+            "l": "A",
+            "x": 1,
+            "y": 3,
+            "id": "w8"
+          },
+          {
+            "l": "I",
+            "x": 2,
+            "y": 3,
+            "id": "w9"
+          },
+          {
+            "l": "N",
+            "x": 3,
+            "y": 3,
+            "id": "w10"
+          },
+          {
+            "l": "S",
+            "x": 4,
+            "y": 3,
+            "id": "w24"
+          },
+          {
+            "l": "O",
+            "x": 3,
+            "y": 4,
+            "id": "w11"
+          },
+          {
+            "l": "T",
+            "x": 3,
+            "y": 5,
+            "id": "w12"
+          },
+          {
+            "l": "E",
+            "x": 3,
+            "y": 6,
+            "id": "w13"
+          },
+          {
+            "l": "S",
+            "x": 3,
+            "y": 7,
+            "id": "w25"
+          },
+          {
+            "l": "Y",
+            "x": 2,
+            "y": 6,
+            "id": "w26"
+          },
+          {
+            "l": "A",
+            "x": 4,
+            "y": 6,
+            "id": "w14"
+          },
+          {
+            "l": "S",
+            "x": 5,
+            "y": 6,
+            "id": "w15"
+          },
+          {
+            "l": "T",
+            "x": 6,
+            "y": 6,
+            "id": "w16"
+          },
+          {
+            "l": "S",
+            "x": 7,
+            "y": 6,
+            "id": "w27"
+          },
+          {
+            "l": "T",
+            "x": 7,
+            "y": 2,
+            "id": "w1"
+          },
+          {
+            "l": "E",
+            "x": 7,
+            "y": 3,
+            "id": "w17"
+          },
+          {
+            "l": "A",
+            "x": 7,
+            "y": 4,
+            "id": "w18"
+          },
+          {
+            "l": "R",
+            "x": 7,
+            "y": 5,
+            "id": "w28"
+          },
+          {
+            "l": "P",
+            "x": 5,
+            "y": 4,
+            "id": "w31"
+          },
+          {
+            "l": "L",
+            "x": 6,
+            "y": 4,
+            "id": "w30"
+          },
+          {
+            "l": "T",
+            "x": 8,
+            "y": 4,
+            "id": "w19"
+          },
+          {
+            "l": "E",
+            "x": 9,
+            "y": 4,
+            "id": "w20"
+          },
+          {
+            "l": "S",
+            "x": 10,
+            "y": 4,
+            "id": "w32"
+          }
+        ],
+        "rack": [],
+        "bag": [],
+        "total": 33
+      },
+      "witnessWords": [
+        "STONES",
+        "STARTS",
+        "RAINS",
+        "NOTES",
+        "YEASTS",
+        "TEARS",
+        "PLATES"
+      ]
+    }
+  },
+  {
+    "id": "keep-the-pond",
+    "source": "pond",
+    "title": "Keep the pond",
+    "description": "Turn open space into useful enclosure: reach 60% enclosed hull while preserving the anchored courtyard and a six-letter word. At most eight original letter positions may change.",
+    "budget": 8,
+    "required": [],
+    "metric": "hullCoverage",
+    "target": 60,
+    "longWords": 1,
+    "ponds": 1,
+    "version": 1,
+    "bank": "AAAAAABDDDEEGLLLLNORSSSTY",
+    "words": [
+      "ADD",
+      "AGE",
+      "AGO",
+      "ALERT",
+      "ALL",
+      "ALTER",
+      "AND",
+      "ANT",
+      "ANY",
+      "ARE",
+      "AREA",
+      "ART",
+      "ATE",
+      "BAD",
+      "BAG",
+      "BALL",
+      "BALLS",
+      "BAN",
+      "BAR",
+      "BARE",
+      "BARN",
+      "BASE",
+      "BAT",
+      "BAY",
+      "BEAR",
+      "BEAT",
+      "BED",
+      "BEE",
+      "BELT",
+      "BEND",
+      "BET",
+      "BOAT",
+      "BODY",
+      "BOG",
+      "BOLD",
+      "BONE",
+      "BORE",
+      "BORN",
+      "BOY",
+      "DAD",
+      "DANGER",
+      "DARE",
+      "DATA",
+      "DATE",
+      "DAY",
+      "DAYS",
+      "DEAD",
+      "DEAL",
+      "DEAR",
+      "DEER",
+      "DEN",
+      "DENT",
+      "DOES",
+      "DOG",
+      "DONE",
+      "DOSE",
+      "DOT",
+      "DRESS",
+      "DRY",
+      "DYE",
+      "EAR",
+      "EARN",
+      "EARS",
+      "EASE",
+      "EAST",
+      "EASY",
+      "EAT",
+      "EATEN",
+      "EATER",
+      "EATS",
+      "EDGE",
+      "EEL",
+      "EGO",
+      "ELSE",
+      "END",
+      "ENTER",
+      "ERA",
+      "EYE",
+      "GANDER",
+      "GARDEN",
+      "GAS",
+      "GATE",
+      "GAY",
+      "GEAR",
+      "GEL",
+      "GET",
+      "GLAD",
+      "GOAL",
+      "GOAT",
+      "GOD",
+      "GOES",
+      "GOLD",
+      "GONE",
+      "GOT",
+      "GRAB",
+      "GRAY",
+      "LAB",
+      "LAD",
+      "LADY",
+      "LAG",
+      "LAND",
+      "LANE",
+      "LAST",
+      "LATE",
+      "LATER",
+      "LAY",
+      "LEAD",
+      "LEAN",
+      "LEARN",
+      "LEAST",
+      "LED",
+      "LEG",
+      "LEND",
+      "LENS",
+      "LESS",
+      "LET",
+      "LOAD",
+      "LOAN",
+      "LOG",
+      "LOGS",
+      "LONE",
+      "LONG",
+      "LOSE",
+      "LOSS",
+      "LOST",
+      "LOT",
+      "NAG",
+      "NEAR",
+      "NEAT",
+      "NEED",
+      "NEST",
+      "NET",
+      "NOD",
+      "NODE",
+      "NOR",
+      "NOSE",
+      "NOT",
+      "NOTE",
+      "NOTES",
+      "OAR",
+      "OAT",
+      "OBEY",
+      "ODD",
+      "OLD",
+      "ONE",
+      "ONLY",
+      "ONSET",
+      "ORB",
+      "ORE",
+      "RAGE",
+      "RAN",
+      "RANG",
+      "RANGED",
+      "RAT",
+      "RATE",
+      "RATES",
+      "RAY",
+      "READ",
+      "REAL",
+      "RED",
+      "REED",
+      "RENT",
+      "RESET",
+      "REST",
+      "ROAD",
+      "ROAST",
+      "ROB",
+      "ROD",
+      "RODE",
+      "ROLE",
+      "ROLL",
+      "ROSE",
+      "ROT",
+      "RYE",
+      "SAD",
+      "SAG",
+      "SALE",
+      "SALT",
+      "SAND",
+      "SANE",
+      "SANG",
+      "SAT",
+      "SAY",
+      "SEA",
+      "SEAL",
+      "SEAT",
+      "SEE",
+      "SEED",
+      "SEEDS",
+      "SEEN",
+      "SELL",
+      "SEND",
+      "SENT",
+      "SET",
+      "SLATE",
+      "SLED",
+      "SLY",
+      "SNORE",
+      "SNORT",
+      "SOAR",
+      "SOB",
+      "SOD",
+      "SOLD",
+      "SOLE",
+      "SON",
+      "SONG",
+      "SORT",
+      "SOY",
+      "STALE",
+      "STAR",
+      "STARE",
+      "STARS",
+      "STAY",
+      "STEAL",
+      "STEER",
+      "STONE",
+      "STONES",
+      "STORE",
+      "TAB",
+      "TAG",
+      "TALE",
+      "TALES",
+      "TALL",
+      "TAN",
+      "TAR",
+      "TEA",
+      "TEALS",
+      "TEAR",
+      "TEARS",
+      "TEASE",
+      "TEE",
+      "TEEN",
+      "TELL",
+      "TEN",
+      "TEND",
+      "TENOR",
+      "TOAD",
+      "TOE",
+      "TOLD",
+      "TOLL",
+      "TON",
+      "TONE",
+      "TONER",
+      "TONES",
+      "TORN",
+      "TOY",
+      "TRAY",
+      "TREE",
+      "TREES",
+      "TRY",
+      "YARD",
+      "YARN",
+      "YEAR",
+      "YEASTS",
+      "YELL",
+      "YES",
+      "YET"
+    ],
+    "locks": [
+      {
+        "x": 0,
+        "y": 0,
+        "l": "B"
+      },
+      {
+        "x": 1,
+        "y": 0,
+        "l": "A"
+      },
+      {
+        "x": 2,
+        "y": 0,
+        "l": "L"
+      },
+      {
+        "x": 3,
+        "y": 0,
+        "l": "L"
+      },
+      {
+        "x": 0,
+        "y": 1,
+        "l": "A"
+      },
+      {
+        "x": 0,
+        "y": 2,
+        "l": "L"
+      },
+      {
+        "x": 0,
+        "y": 3,
+        "l": "L"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "l": "A"
+      },
+      {
+        "x": 2,
+        "y": 3,
+        "l": "D"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "l": "Y"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "l": "A"
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "l": "D"
+      }
+    ],
+    "bounds": {
+      "minX": -9,
+      "maxX": 14,
+      "minY": -9,
+      "maxY": 14
+    },
+    "state": {
+      "board": [
+        {
+          "l": "B",
+          "x": 0,
+          "y": 0,
+          "id": "w0"
+        },
+        {
+          "l": "A",
+          "x": 1,
+          "y": 0,
+          "id": "w1"
+        },
+        {
+          "l": "L",
+          "x": 2,
+          "y": 0,
+          "id": "w2"
+        },
+        {
+          "l": "L",
+          "x": 3,
+          "y": 0,
+          "id": "w3"
+        },
+        {
+          "l": "S",
+          "x": 4,
+          "y": 0,
+          "id": "w4"
+        },
+        {
+          "l": "A",
+          "x": 0,
+          "y": 1,
+          "id": "w5"
+        },
+        {
+          "l": "L",
+          "x": 0,
+          "y": 2,
+          "id": "w6"
+        },
+        {
+          "l": "L",
+          "x": 0,
+          "y": 3,
+          "id": "w7"
+        },
+        {
+          "l": "S",
+          "x": 0,
+          "y": 4,
+          "id": "w8"
+        },
+        {
+          "l": "A",
+          "x": 1,
+          "y": 3,
+          "id": "w9"
+        },
+        {
+          "l": "D",
+          "x": 2,
+          "y": 3,
+          "id": "w10"
+        },
+        {
+          "l": "Y",
+          "x": 3,
+          "y": 3,
+          "id": "w11"
+        },
+        {
+          "l": "A",
+          "x": 3,
+          "y": 1,
+          "id": "w12"
+        },
+        {
+          "l": "D",
+          "x": 3,
+          "y": 2,
+          "id": "w13"
+        },
+        {
+          "l": "G",
+          "x": -2,
+          "y": 4,
+          "id": "w14"
+        },
+        {
+          "l": "A",
+          "x": -1,
+          "y": 4,
+          "id": "w15"
+        },
+        {
+          "l": "A",
+          "x": -2,
+          "y": 5,
+          "id": "w16"
+        },
+        {
+          "l": "R",
+          "x": -2,
+          "y": 6,
+          "id": "w17"
+        },
+        {
+          "l": "D",
+          "x": -2,
+          "y": 7,
+          "id": "w18"
+        },
+        {
+          "l": "E",
+          "x": -2,
+          "y": 8,
+          "id": "w19"
+        },
+        {
+          "l": "N",
+          "x": -2,
+          "y": 9,
+          "id": "w20"
+        },
+        {
+          "l": "O",
+          "x": -1,
+          "y": 9,
+          "id": "w21"
+        },
+        {
+          "l": "T",
+          "x": 0,
+          "y": 9,
+          "id": "w22"
+        },
+        {
+          "l": "E",
+          "x": 1,
+          "y": 9,
+          "id": "w23"
+        },
+        {
+          "l": "S",
+          "x": 2,
+          "y": 9,
+          "id": "w24"
+        }
+      ],
+      "rack": [],
+      "bag": [],
+      "total": 25
+    },
+    "report": {
+      "scope": "Constructive search over a restricted family of word-crossing layouts, not exhaustive over the playable board. Reported bests are witnesses, not proven global optima.",
+      "stages": [
+        {
+          "words": [
+            "GAS",
+            "SAG"
+          ],
+          "generated": 2,
+          "retained": 2
+        },
+        {
+          "words": [
+            "GARDEN",
+            "DANGER",
+            "GANDER",
+            "RANGED"
+          ],
+          "generated": 8,
+          "retained": 8
+        },
+        {
+          "words": [
+            "NOTES",
+            "STONE",
+            "TONES",
+            "ONSET"
+          ],
+          "generated": 16,
+          "retained": 16
+        }
+      ],
+      "examined": 16,
+      "feasibleInFamily": 2,
+      "frontier": [
+        {
+          "changed": 6,
+          "value": 60
+        },
+        {
+          "changed": 4,
+          "value": 52
+        },
+        {
+          "changed": 0,
+          "value": 51
+        }
+      ],
+      "bestKnown": 60,
+      "witness": {
+        "board": [
+          {
+            "l": "B",
+            "x": 0,
+            "y": 0,
+            "id": "w0"
+          },
+          {
+            "l": "A",
+            "x": 1,
+            "y": 0,
+            "id": "w1"
+          },
+          {
+            "l": "L",
+            "x": 2,
+            "y": 0,
+            "id": "w2"
+          },
+          {
+            "l": "L",
+            "x": 3,
+            "y": 0,
+            "id": "w3"
+          },
+          {
+            "l": "S",
+            "x": 4,
+            "y": 0,
+            "id": "w4"
+          },
+          {
+            "l": "A",
+            "x": 0,
+            "y": 1,
+            "id": "w5"
+          },
+          {
+            "l": "L",
+            "x": 0,
+            "y": 2,
+            "id": "w6"
+          },
+          {
+            "l": "L",
+            "x": 0,
+            "y": 3,
+            "id": "w7"
+          },
+          {
+            "l": "S",
+            "x": 0,
+            "y": 4,
+            "id": "w8"
+          },
+          {
+            "l": "A",
+            "x": 1,
+            "y": 3,
+            "id": "w9"
+          },
+          {
+            "l": "D",
+            "x": 2,
+            "y": 3,
+            "id": "w10"
+          },
+          {
+            "l": "Y",
+            "x": 3,
+            "y": 3,
+            "id": "w11"
+          },
+          {
+            "l": "A",
+            "x": 3,
+            "y": 1,
+            "id": "w12"
+          },
+          {
+            "l": "D",
+            "x": 3,
+            "y": 2,
+            "id": "w13"
+          },
+          {
+            "l": "G",
+            "x": -2,
+            "y": 4,
+            "id": "w14"
+          },
+          {
+            "l": "A",
+            "x": -1,
+            "y": 4,
+            "id": "w15"
+          },
+          {
+            "l": "A",
+            "x": -2,
+            "y": 5,
+            "id": "w16"
+          },
+          {
+            "l": "N",
+            "x": -2,
+            "y": 6,
+            "id": "w20"
+          },
+          {
+            "l": "D",
+            "x": -2,
+            "y": 7,
+            "id": "w18"
+          },
+          {
+            "l": "E",
+            "x": -2,
+            "y": 8,
+            "id": "w19"
+          },
+          {
+            "l": "R",
+            "x": -2,
+            "y": 9,
+            "id": "w17"
+          },
+          {
+            "l": "O",
+            "x": -1,
+            "y": 6,
+            "id": "w21"
+          },
+          {
+            "l": "T",
+            "x": 0,
+            "y": 6,
+            "id": "w22"
+          },
+          {
+            "l": "E",
+            "x": 1,
+            "y": 6,
+            "id": "w23"
+          },
+          {
+            "l": "S",
+            "x": 2,
+            "y": 6,
+            "id": "w24"
+          }
+        ],
+        "rack": [],
+        "bag": [],
+        "total": 25
+      },
+      "witnessWords": [
+        "BALLS",
+        "BALLS",
+        "LADY",
+        "LADY",
+        "GAS",
+        "GANDER",
+        "NOTES"
+      ]
+    }
+  }
+]
