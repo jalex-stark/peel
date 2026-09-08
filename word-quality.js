@@ -1,7 +1,7 @@
 import {getWords} from './game.js';
 import {TIERS,wordTier} from './word-tiers.js';
 export const QUALITY_VALUES={S:100,A:80,B:60,C:40,D:20,F:0};
-export const QUALITY_COLORS={S:'#e4c675',A:'#b3d18b',B:'#b6ccc0',C:'#c0cede',D:'#e3b28c',F:'#d99487',none:'#deded7'};
+export const QUALITY_COLORS={S:'#edc65c',A:'#a9d66e',B:'#8ed2bf',C:'#bcb5e3',D:'#efa968',F:'#e98491',none:'#deded7'};
 /** A crossing inherits its weaker word, never an average of its two words. */
 export function wordQuality(tiles,ranks=new Map(),policy={}){
  const words=getWords(tiles).map(w=>({...w,...wordTier(w.word,ranks,policy)}));

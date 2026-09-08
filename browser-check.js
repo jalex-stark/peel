@@ -51,7 +51,10 @@ if(process.argv[2]==='--quality'){
   await page.evaluate(()=>{localStorage.setItem('peel-game',JSON.stringify({board:[...'COIF'].map((l,x)=>({id:'q'+x,l,x,y:0})).concat({id:'q4',l:'Q',x:2,y:-1}),rack:[],bag:[],total:5}));localStorage.setItem('peel-quality-highlight','false');});
   await page.reload();await page.waitForFunction(()=>!document.querySelector('#dictionary-open').disabled);await page.locator('#score-open').click();
   await page.locator('[data-score-inspect="quality"]').hover();assert.equal(await page.locator('#inspect-quality>b').innerText(),'64');assert.equal(await page.locator('.quality-colored').count(),5);
-  assert.equal(await page.locator('[data-id="q2"]').getAttribute('data-quality-tier'),'C');assert.equal(await page.locator('[data-id="q0"]').getAttribute('data-quality-tier'),'A');
+  assert.equal(await page.locator('[data-id="q2"]').getAttribute('data-quality-tier'),'C');assert.equal(await page.locator('[data-id="q0"]').getAttribute('data-quality-tier'),'A');assert.notEqual(await page.locator('[data-id="q0"]').evaluate(e=>getComputedStyle(e).backgroundColor),await page.locator('[data-id="q2"]').evaluate(e=>getComputedStyle(e).backgroundColor));
+  await page.locator('[data-score-inspect="tier:A"]').hover();assert.equal(await page.locator('.quality-colored').count(),4);assert.equal(await page.locator('[data-id="q2"]').getAttribute('data-quality-tier'),'A');assert.equal(await page.locator('.quality-muted').count(),1);
+  await page.locator('[data-score-inspect="tier:C"]').focus();assert.equal(await page.locator('.quality-colored').count(),2);assert.match(await page.locator('#inspection-caption').innerText(),/QI/);
+  await page.locator('[data-score-inspect="tier:S"]').hover();assert.equal(await page.locator('.quality-colored').count(),0);
   await page.locator('#quality-pin').click();await page.locator('#board').hover();assert.equal(await page.locator('.quality-colored').count(),5);
   await page.locator('[data-id="q4"]').click();await page.keyboard.press('ArrowUp');await page.keyboard.press('Enter');assert.equal(await page.locator('[data-id="q4"]').getAttribute('data-quality-tier'),'none');assert.equal(await page.locator('[data-id="q2"]').getAttribute('data-quality-tier'),'A');await page.keyboard.press('z');
   await page.locator('#score-close').click();assert.equal(await page.locator('.quality-colored').count(),5);
@@ -92,6 +95,7 @@ if(process.argv[2]==='--prototypes'){
   for(const p of prototypes){
    await page.goto('http://localhost:5173/?work-order='+p.id);await page.waitForSelector('#work-order-submit');
    assert.equal(await page.locator('#plane>.tile').count(),p.state.board.length);assert.equal(await page.locator('#rack>.tile').count(),p.state.rack.length);
+   await page.locator('[data-score-inspect="original"]').hover();assert.equal(await page.locator('.original-shadow').count(),p.state.board.length);assert.equal(await page.locator('.original-shadow.changed').count(),0);await page.locator('#work-order-submit').hover();assert.equal(await page.locator('.original-shadow').count(),0);
    await page.locator('#work-order-submit').click();assert.match(await page.locator('#work-order-notice').innerText(),/Still needed/);
    if(p.state.rack.length){await page.keyboard.press('Space');await clickCell(5,2);assert.equal(await page.locator('#plane>.tile').count(),p.state.board.length+1);await page.keyboard.press('z');}
    await page.locator('#plane>.tile').first().dblclick();assert.ok(await page.locator('#plane>.tile.selected').count()>1);
@@ -99,6 +103,11 @@ if(process.argv[2]==='--prototypes'){
    assert.notDeepEqual(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).board,stateKey),p.state.board);
    await page.keyboard.press('z');assert.deepEqual(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).board,stateKey),p.state.board);
    await page.getByText('Search findings (spoilers)',{exact:true}).click();await page.locator('#work-order-witness').click();await page.locator('#work-order-submit').click();assert.match(await page.locator('#work-order-notice').innerText(),/Accepted/);
+   await page.locator('[data-score-inspect="original"]').focus();
+   const changed=p.state.board.filter(t=>!p.report.witness.board.some(c=>c.x===t.x&&c.y===t.y&&c.l===t.l)).length;
+   assert.equal(await page.locator('.original-shadow.changed').count(),changed);assert.ok(changed>0);
+   assert.match(await page.locator('#inspection-caption').innerText(),/any copy/);
+   await page.locator('#work-order-submit').focus();assert.equal(await page.locator('.original-shadow').count(),0);
    assert.equal(await page.evaluate(()=>localStorage.getItem('peel-game')),original);
    await page.reload();await page.waitForSelector('#work-order-submit');await page.locator('#work-order-submit').click();assert.match(await page.locator('#work-order-notice').innerText(),/Accepted/);
    assert.equal(await page.locator('#dictionary-open').isDisabled(),true);

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {wordTier,normalizeTierPolicy,filteredDictionary,tierAllowed} from './word-tiers.js';
+import {wordTier,normalizeTierPolicy,filteredDictionary,tierAllowed,GENERATED_TIERS} from './word-tiers.js';
 test('User vocabulary anchors override frequency, including unranked expressive words',()=>{
  const expected={TWIXT:'A',TURGID:'S',COIF:'A',SUEDE:'A',VERACITY:'S',BY:'B',BED:'B',RUN:'B',PARTY:'B',DONOR:'B',BALLS:'B',QI:'C',AVO:'D',PUL:'F',SOU:'D'};
  for(const [word,tier] of Object.entries(expected)){assert.equal(wordTier(word).tier,tier);assert.equal(wordTier(word,new Map([[word,1]])).tier,tier);}
@@ -14,7 +14,7 @@ test('Tier cutoffs apply to bundled and added words, while explicit hides still 
  assert.equal(tierAllowed('F','C'),false);assert.equal(tierAllowed('C','C'),true);assert.equal(tierAllowed('bogus','C'),false);
 });
 test('Policy normalization retains valid personal ratings and discards malformed preferences',()=>{
- assert.deepEqual(normalizeTierPolicy({minimum:'Z',overrides:{VERACITY:'S',AVO:'B',PUL:'G','<script>':'S'}}),{version:'editorial-v1',minimum:'F',overrides:{VERACITY:'S',AVO:'B'}});
+ assert.deepEqual(normalizeTierPolicy({minimum:'Z',overrides:{VERACITY:'S',AVO:'B',PUL:'G','<script>':'S'}}),{version:'editorial-haiku-v2',minimum:'F',overrides:{VERACITY:'S',AVO:'B'}});
  assert.equal(wordTier('PUL',new Map(),{overrides:{PUL:'A'}}).tier,'A');
 });
 
@@ -39,4 +39,13 @@ test('Quality grades and custom ratings are shared by live inspections, replay a
  test('Every prototype word is present in the normal bundled dictionary',async()=>{
  const {readFile}=await import('node:fs/promises');const base=new Set(JSON.parse(await readFile('public/words.json','utf8')));const levels=JSON.parse(await readFile('challenges/prototypes.json','utf8'));
  for(const level of levels)for(const word of level.words)assert.ok(base.has(word),word);
+});
+
+test('Generated ratings have valid words and tiers; personal and editorial ratings take precedence',async()=>{
+ const {readFile}=await import('node:fs/promises');const base=new Set(JSON.parse(await readFile('public/words.json','utf8')));
+ assert.ok(GENERATED_TIERS.size>4000);
+ for(const [word,tier] of GENERATED_TIERS){assert.ok(base.has(word),word);assert.ok(['S','A','B','C','D','F'].includes(tier));}
+ assert.equal(wordTier('KEY').tier,'B');assert.equal(wordTier('VERACITY').tier,'S');
+ const word=[...GENERATED_TIERS.keys()].find(w=>wordTier(w).source.startsWith('Haiku'));
+ assert.ok(word);assert.equal(wordTier(word,new Map(),{overrides:{[word]:'S'}}).source,'Your rating');
 });

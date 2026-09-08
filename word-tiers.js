@@ -1,5 +1,6 @@
+import generated from './generated-word-tiers.json' with {type:'json'};
 // These are editorial game preferences, not claims that lower tiers are invalid English.
-export const TIER_VERSION='editorial-v1';
+export const TIER_VERSION='editorial-haiku-v2';
 export const TIERS=['S','A','B','C','D','F'];
 export const TIER_LABELS={S:'Exceptional',A:'Expressive',B:'Everyday',C:'Specialist / unreviewed',D:'Obscure short forms',F:'Avoid'};
 const groups={
@@ -12,6 +13,10 @@ const groups={
 };
 // Familiar animal/music/material words shouldn't become casualties of a short-form list.
 groups.D=groups.D.split(' ').filter(w=>!'AUK AUKS EMU EMUS ORE ORES SKA OUD OUDS'.split(' ').includes(w)).join(' ');
+// Sample review: ordinary short words retain the everyday tier.
+groups.B+=' DARN GRATE GRATES SEX BOA BOP BOW BUD COO DEW DOE DUO EWE FEE KEY KID KIN KIT LAW LOW MAD MAY MEN MET MIX MOM MUD NAN NAY NUB';
+groups.C+=' CIS';
+export const GENERATED_TIERS=new Map(Object.entries(generated.ratings));
 export const CURATED_TIERS=new Map(Object.entries(groups).flatMap(([tier,text])=>text.split(/\s+/).filter(Boolean).map(word=>[word,tier])));
 export function normalizeTierPolicy(value){
  const overrides={};for(const [word,tier] of Object.entries(value?.overrides||{}))if(/^[A-Z]{2,24}$/.test(word)&&TIERS.includes(tier))overrides[word]=tier;
@@ -21,6 +26,7 @@ export function wordTier(word,ranks=new Map(),policy={}){
  const w=word.toUpperCase(),personal=policy.overrides?.[w],curated=CURATED_TIERS.get(w);
  if(TIERS.includes(personal))return {tier:personal,source:'Your rating',provisional:false};
  if(curated)return {tier:curated,source:'Editorial rating',provisional:false};
+ const proposed=GENERATED_TIERS.get(w);if(TIERS.includes(proposed))return {tier:proposed,source:'Haiku batch rating · editable',provisional:false};
  if(ranks.has(w)&&ranks.get(w)<=20000)return {tier:'B',source:'Provisional · frequent in the bundled corpus',provisional:true};
  return {tier:'C',source:'Provisional · not reviewed',provisional:true};
 }
