@@ -106,3 +106,8 @@ Word quality’s tier key shows word counts. Hover or keyboard-focus a tier to h
 `generated-word-tiers.json` contains an initial Claude Haiku 4.5 batch pass covering challenge vocabulary, short words, and 4,000 frequent dictionary words. Editorial anchors and personal ratings take precedence; generated ratings are labeled and editable. This is a subjective starting point, not a fully reviewed dictionary. `node scripts/populate-word-tiers.mjs` reproduces/resumes the batch job using the local authenticated Claude CLI, four workers, 150 words per batch, and a $0.20 per-call cap. Raw responses and retries stay in ignored `artifacts/tier-batches/`; pass `--fresh` to rebuild the candidate list.
 
 Hover or focus the changed-position constraint to compare against the starting board. Orange shadows show the exact original positions counting against the budget, with the required original letter; equal copies are interchangeable.
+
+When hosted at jalexstark.com, the website shared journal uploads gameplay actions
+and board states to a private playtest archive. Pausing the local QA panel only
+pauses that panel. Submitted QA notes are included; raw feedback typing is excluded.
+The GameActionLog hook is passive on other hosts without the shared collector.
